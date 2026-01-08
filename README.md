@@ -12,7 +12,7 @@ Professional trading signal system for Indian markets (NSE) with AI-powered swin
 - **Swing Trading** - Daily breakout/pullback signals with multi-timeframe analysis
 - **Intraday Bias** - 15m EOD simulation with VWAP and EMA crossovers
 - **Risk Management** - Position sizing, R:R gating, sector concentration limits
-- **Market Regime** - TRENDING/RANGING/VOLATILE/DEAD classification
+- **Market Regime** - TRENDING/RANGING/VOLATILE/DEAD classification with confidence scores
 
 ### V1 Enhancements
 | Feature | Description |
@@ -22,16 +22,25 @@ Professional trading signal system for Indian markets (NSE) with AI-powered swin
 | **Regime Gating** | -20 score for swing trades in sideways markets |
 | **Sector ATR Caps** | Dynamic volatility caps (METAL 3%, IT 2%) |
 | **Percentile Scoring** | Top 8% signals vs static threshold |
-| **Signal Explainability** | `passed[]` / `failed[]` arrays |
+| **Signal Explainability** | `passed[]` / `failed[]` arrays in response |
+| **Sector Deduplication** | Max 2 signals per sector per scan |
 | **Options Hints** | Covered call suggestions in low-vol regimes |
 | **Economic Indicators** | RBI rates, inflation as regime inputs |
-| **CLI Backtest** | Date-range backtesting via command line |
+
+### V1.1 Enhancements
+| Feature | Description |
+|---------|-------------|
+| **Regime Confidence** | 0-1 probability scale for position scaling |
+| **Trade Logger** | CSV with MFE, MAE, bars held, regime at entry |
+| **Trade Stats API** | Win rate by regime, avg excursion metrics |
 
 ---
 
 ## 🏗️ Architecture
 
 ```
+DATA → STRATEGY → SCORER → REGIME FILTER → RISK MANAGER → RESPONSE
+
 ┌─────────────────────────────────────────────────────────────────────┐
 │                         FRONTEND (React)                            │
 │   Dashboard  │  SignalCard  │  StockChart  │  Portfolio Tracker    │
@@ -40,7 +49,7 @@ Professional trading signal system for Indian markets (NSE) with AI-powered swin
 ┌────────────────────────────────▼────────────────────────────────────┐
 │                         BACKEND (FastAPI)                           │
 │  ┌──────────────────────────────────────────────────────────────┐   │
-│  │  SIGNAL GENERATOR  →  SCORER  →  RISK MANAGER  →  RESPONSE   │   │
+│  │  SIGNAL GENERATOR  →  SCORER  →  REGIME  →  RISK  →  OUTPUT  │   │
 │  └──────────────────────────────────────────────────────────────┘   │
 │  ┌──────────────────────────────────────────────────────────────┐   │
 │  │  DATA: Yahoo → NSE → AlphaVantage  │  CACHE: Redis/CSV       │   │
@@ -79,6 +88,7 @@ npm run dev
 | `GET /api/stocks/{symbol}` | OHLCV data |
 | `GET /api/health` | Health + cache stats |
 | `GET /api/data-sources/health` | Data source status |
+| `GET /api/trade-stats` | **V1.1** Win rate by regime, MFE/MAE |
 | `GET /api/economic-indicators` | RBI rates, inflation |
 | `GET /api/options-hint/{symbol}` | Covered call suggestions |
 | `POST /api/calculate-position` | Position sizing |
@@ -133,12 +143,13 @@ TradeEdgePro/
 │   │   │   ├── fetch_data.py       # Data with NSE fallback
 │   │   │   ├── data_source_monitor.py  # Health tracking
 │   │   │   ├── sector_benchmarks.py    # ATR/volume caps
+│   │   │   ├── trade_logger.py     # V1.1 Trade outcomes
 │   │   │   └── economic_indicators.py  # RBI data
 │   │   ├── engine/
 │   │   │   ├── signal_generator.py # Parallel scanning
 │   │   │   ├── scorer.py           # Regime-aware scoring
 │   │   │   ├── risk_manager.py     # Position sizing
-│   │   │   └── market_regime.py    # TRENDING/RANGING
+│   │   │   └── market_regime.py    # 0-1 confidence scores
 │   │   └── strategies/
 │   │       ├── swing.py            # Pullback + breakout
 │   │       ├── intraday_bias.py    # Sector ATR caps
