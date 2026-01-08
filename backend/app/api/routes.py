@@ -521,6 +521,31 @@ async def get_options_hint_endpoint(symbol: str):
     }
 
 
+@router.get("/trade-stats")
+async def get_trade_stats_endpoint(
+    start_date: str = None,
+    symbol: str = None,
+    strategy: str = None
+):
+    """
+    Get trade outcome statistics from logged trades.
+    
+    V1.1 Feature: Returns win rate by regime, avg MFE/MAE, avg bars held.
+    """
+    from app.data.trade_logger import get_trade_history, get_trade_stats
+    
+    trades = get_trade_history(start_date, symbol, strategy)
+    
+    if not trades:
+        return {
+            "message": "No trades logged yet",
+            "totalTrades": 0,
+        }
+    
+    stats = get_trade_stats(trades)
+    return stats
+
+
 # ===== Portfolio Tracker Endpoints =====
 
 class TradeRequest(BaseModel):

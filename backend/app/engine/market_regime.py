@@ -30,7 +30,7 @@ class RegimeAnalysis:
     atr_pct: float
     ema_slope: float
     trend_consistency: float
-    confidence: float  # 0-100
+    confidence: float  # 0.0-1.0 probability scale (V1.1)
     change_pct: float = 0.0  # Daily % change
     economic_bias: str = "neutral"  # "hawkish", "neutral", "dovish"
     
@@ -41,7 +41,7 @@ class RegimeAnalysis:
             "atrPct": round(self.atr_pct, 2),
             "emaSlope": round(self.ema_slope, 4),
             "trendConsistency": round(self.trend_consistency, 1),
-            "confidence": round(self.confidence, 0),
+            "confidence": round(self.confidence, 2),  # 0-1 scale
             "changePct": round(self.change_pct, 2),
             "economicBias": self.economic_bias,
         }
@@ -146,7 +146,7 @@ def classify_regime(df: pd.DataFrame) -> RegimeAnalysis:
         atr_pct=atr_pct,
         ema_slope=ema_slope,
         trend_consistency=trend_consistency,
-        confidence=confidence
+        confidence=min(1.0, confidence / 100)  # Normalize to 0-1
     )
 
 
