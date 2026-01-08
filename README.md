@@ -1,8 +1,31 @@
-# TradeEdge Pro MVP
+# TradeEdge Pro
 
-A full-stack trading signal application for Indian markets (NSE) featuring intraday-bias and swing trade recommendations.
+Professional trading signal system for Indian markets (NSE) with AI-powered swing and intraday strategies.
 
-> ⚠️ **For educational purposes only - not investment advice.** All signals are EOD. Intraday-bias uses historical 15m data for simulation.
+> ⚠️ **For educational purposes only - not investment advice.** All signals are EOD.
+
+---
+
+## ✨ Features
+
+### Core
+- **Swing Trading** - Daily breakout/pullback signals with multi-timeframe analysis
+- **Intraday Bias** - 15m EOD simulation with VWAP and EMA crossovers
+- **Risk Management** - Position sizing, R:R gating, sector concentration limits
+- **Market Regime** - TRENDING/RANGING/VOLATILE/DEAD classification
+
+### V1 Enhancements
+| Feature | Description |
+|---------|-------------|
+| **Data Redundancy** | Yahoo → NSE → Alpha Vantage auto-failover |
+| **NIFTY 500 Support** | Adaptive workers (10→40) for larger universes |
+| **Regime Gating** | -20 score for swing trades in sideways markets |
+| **Sector ATR Caps** | Dynamic volatility caps (METAL 3%, IT 2%) |
+| **Percentile Scoring** | Top 8% signals vs static threshold |
+| **Signal Explainability** | `passed[]` / `failed[]` arrays |
+| **Options Hints** | Covered call suggestions in low-vol regimes |
+| **Economic Indicators** | RBI rates, inflation as regime inputs |
+| **CLI Backtest** | Date-range backtesting via command line |
 
 ---
 
@@ -10,131 +33,19 @@ A full-stack trading signal application for Indian markets (NSE) featuring intra
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                           FRONTEND                                  │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐              │
-│  │  Dashboard   │  │  SignalCard  │  │  StockChart  │              │
-│  │  (Tabs/Search)│  │  (Signals)   │  │  (ApexCharts)│              │
-│  └──────────────┘  └──────────────┘  └──────────────┘              │
-│                         React + Tailwind CSS                        │
+│                         FRONTEND (React)                            │
+│   Dashboard  │  SignalCard  │  StockChart  │  Portfolio Tracker    │
 └────────────────────────────────┬────────────────────────────────────┘
                                  │ REST API
 ┌────────────────────────────────▼────────────────────────────────────┐
-│                           BACKEND (FastAPI)                         │
-│  ┌──────────────────────────────────────────────────────────────┐  │
-│  │                      API ROUTES                               │  │
-│  │  /api/swing  │  /api/intraday-bias  │  /api/stocks/{symbol}  │  │
-│  └──────────────────────────────────────────────────────────────┘  │
-│                                │                                    │
-│  ┌─────────────────────────────▼────────────────────────────────┐  │
-│  │                    SIGNAL GENERATOR                           │  │
-│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐   │  │
-│  │  │   Swing     │  │  Intraday   │  │     Parallel        │   │  │
-│  │  │  Strategy   │  │   Bias      │  │  ThreadPoolExecutor │   │  │
-│  │  └─────────────┘  └─────────────┘  └─────────────────────┘   │  │
-│  └──────────────────────────────────────────────────────────────┘  │
-│                                │                                    │
-│  ┌─────────────────────────────▼────────────────────────────────┐  │
-│  │  SCORER (Weighted)          │  RISK MANAGER (Hard Kills)     │  │
-│  │  • Trend Strength: 25%      │  • RR < 2.0 → REJECT           │  │
-│  │  • Breakout: 20%            │  • SL > 5% → REJECT            │  │
-│  │  • Volume: 20%              │  • Trades ≥ 5 → REJECT         │  │
-│  │  • RSI/Momentum: 15%        │                                 │  │
-│  │  • Market Align: 10%        │  Position Size =                │  │
-│  │  Threshold: ≥70/100         │  (Capital × Risk%) / SL Dist   │  │
-│  └──────────────────────────────────────────────────────────────┘  │
-│                                │                                    │
-│  ┌─────────────────────────────▼────────────────────────────────┐  │
-│  │                      DATA LAYER                               │  │
-│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐   │  │
-│  │  │   Yahoo     │  │   Alpha     │  │  Cache (Redis/CSV)  │   │  │
-│  │  │  Finance    │→ │  Vantage    │  │  Daily: 24h TTL     │   │  │
-│  │  │  (Primary)  │  │ (Fallback)  │  │  Intraday: 15m TTL  │   │  │
-│  │  └─────────────┘  └─────────────┘  └─────────────────────┘   │  │
-│  └──────────────────────────────────────────────────────────────┘  │
+│                         BACKEND (FastAPI)                           │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │  SIGNAL GENERATOR  →  SCORER  →  RISK MANAGER  →  RESPONSE   │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │  DATA: Yahoo → NSE → AlphaVantage  │  CACHE: Redis/CSV       │   │
+│  └──────────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────────┘
-```
-
----
-
-## 🧠 Core Logic
-
-### Swing Strategy (`swing.py`)
-```
-IF  20EMA > 50EMA (Bullish Trend)
-AND ADX > 25 (Strong Trend)
-AND RSI in 45-65 (Goldilocks Zone)
-AND MACD Histogram > 0 (Positive Momentum)
-AND Price > 20-day High (Breakout)
-AND Volume > 1.5x Average (Confirmation)
-THEN → BUY Signal
-
-Stop Loss = 2×ATR below entry OR below 50EMA
-Targets = 1:2 and 1:3 Risk-Reward
-```
-
-### Intraday Bias Strategy (`intraday_bias.py`)
-```
-IF  9EMA crosses above 21EMA (Crossover)
-AND Price > VWAP (Bullish Bias)
-AND ATR < 2% (Low Volatility)
-AND Volume > 1.2x 20-bar Avg (Confirmation)
-THEN → BUY Bias
-
-Stop Loss = 1.5×ATR
-Targets = 2×ATR, 3×ATR
-```
-
-### Data Validation Gate
-```python
-def validate_df(df):
-    if len(df) < 60: return False           # Minimum bars
-    if df[OHLCV].isna().any(): return False  # No NaN values
-    if not df.index.is_monotonic: return False
-    return True
-```
-
-### Risk Manager Hard Kills
-```python
-if risk_reward < 2.0:    reject()  # Poor R:R
-if stop_loss_pct > 5.0:  reject()  # SL too wide
-if open_trades >= 5:     reject()  # Max exposure
-```
-
----
-
-## 📁 Project Structure
-
-```
-TradeEdgePro/
-├── backend/
-│   ├── app/
-│   │   ├── api/routes.py        # REST endpoints
-│   │   ├── config.py            # Settings (NIFTY100/200/500)
-│   │   ├── data/
-│   │   │   ├── fetch_data.py    # Yahoo + Alpha Vantage
-│   │   │   ├── cache_manager.py # Redis/CSV hybrid
-│   │   │   └── nifty100.json    # Stock universe
-│   │   ├── engine/
-│   │   │   ├── signal_generator.py
-│   │   │   ├── scorer.py        # Weighted scoring
-│   │   │   └── risk_manager.py  # Position sizing
-│   │   ├── strategies/
-│   │   │   ├── base.py          # Abstract + indicators
-│   │   │   ├── swing.py         # Daily strategy
-│   │   │   └── intraday_bias.py # 15m EOD simulation
-│   │   └── main.py              # FastAPI app
-│   └── requirements.txt
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── Dashboard.jsx    # Tabs, search, filters
-│   │   │   ├── SignalCard.jsx   # Signal display
-│   │   │   ├── StockChart.jsx   # ApexCharts
-│   │   │   └── RiskCalculator.jsx
-│   │   ├── hooks/useSignals.js  # API polling
-│   │   └── api/client.js        # Axios client
-│   └── package.json
-└── docker-compose.yml
 ```
 
 ---
@@ -155,7 +66,7 @@ npm install
 npm run dev
 ```
 
-Open: **Backend** http://localhost:8000/docs | **Frontend** http://localhost:5173
+**Links**: Backend http://localhost:8000/docs | Frontend http://localhost:5173
 
 ---
 
@@ -164,21 +75,83 @@ Open: **Backend** http://localhost:8000/docs | **Frontend** http://localhost:517
 | Endpoint | Description |
 |----------|-------------|
 | `GET /api/swing` | Swing signals (daily) |
-| `GET /api/intraday-bias` | 15m EOD simulation |
-| `GET /api/stocks/{symbol}` | OHLCV data for charts |
+| `GET /api/intraday-bias` | 15m EOD signals |
+| `GET /api/stocks/{symbol}` | OHLCV data |
 | `GET /api/health` | Health + cache stats |
+| `GET /api/data-sources/health` | Data source status |
+| `GET /api/economic-indicators` | RBI rates, inflation |
+| `GET /api/options-hint/{symbol}` | Covered call suggestions |
 | `POST /api/calculate-position` | Position sizing |
+| `POST /api/trades/add` | Portfolio tracker |
+
+---
+
+## 🧪 CLI Tools
+
+### Backtest
+```bash
+cd backend
+python run_backtest.py --strategy swing --from 2024-01-01 --to 2024-12-31
+python run_backtest.py --symbol RELIANCE.NS
+```
 
 ---
 
 ## ⚙️ Configuration
 
 ```env
-STOCK_UNIVERSE=NIFTY100   # NIFTY100, NIFTY200, NIFTY500
-MIN_SIGNAL_SCORE=70       # Minimum score threshold
-MIN_RISK_REWARD=2.0       # RR gate
-MAX_STOP_LOSS_PCT=5.0     # SL gate
-MAX_OPEN_TRADES=5         # Portfolio limit
+# Stock Universe
+STOCK_UNIVERSE=NIFTY100          # NIFTY100, NIFTY200, NIFTY500
+
+# Strategy
+MIN_SIGNAL_SCORE=70
+MIN_RISK_REWARD=2.0
+MAX_STOP_LOSS_PCT=5.0
+MAX_OPEN_TRADES=5
+
+# Feature Toggles (Optional)
+ENABLE_OPTIONS_HINTS=false
+ENABLE_ECONOMIC_INDICATORS=false
+ADAPTIVE_WORKERS=true
+
+# Alerts
+TELEGRAM_BOT_TOKEN=your_token
+TELEGRAM_CHAT_ID=your_chat_id
+```
+
+---
+
+## 📁 Project Structure
+
+```
+TradeEdgePro/
+├── backend/
+│   ├── app/
+│   │   ├── api/routes.py           # REST endpoints
+│   │   ├── config.py               # Settings
+│   │   ├── data/
+│   │   │   ├── fetch_data.py       # Data with NSE fallback
+│   │   │   ├── data_source_monitor.py  # Health tracking
+│   │   │   ├── sector_benchmarks.py    # ATR/volume caps
+│   │   │   └── economic_indicators.py  # RBI data
+│   │   ├── engine/
+│   │   │   ├── signal_generator.py # Parallel scanning
+│   │   │   ├── scorer.py           # Regime-aware scoring
+│   │   │   ├── risk_manager.py     # Position sizing
+│   │   │   └── market_regime.py    # TRENDING/RANGING
+│   │   └── strategies/
+│   │       ├── swing.py            # Pullback + breakout
+│   │       ├── intraday_bias.py    # Sector ATR caps
+│   │       └── options_hints.py    # Covered calls
+│   ├── run_backtest.py             # CLI backtest tool
+│   └── requirements.txt
+├── frontend/
+│   ├── src/components/
+│   │   ├── Dashboard.jsx
+│   │   ├── SignalCard.jsx
+│   │   └── Portfolio.jsx
+│   └── package.json
+└── docker-compose.yml
 ```
 
 ---
