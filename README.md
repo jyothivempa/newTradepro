@@ -12,7 +12,7 @@ Professional trading signal system for Indian markets (NSE) with AI-powered swin
 - **Swing Trading** - Daily breakout/pullback signals with multi-timeframe analysis
 - **Intraday Bias** - 15m EOD simulation with VWAP and EMA crossovers
 - **Risk Management** - Position sizing, R:R gating, sector concentration limits
-- **Market Regime** - TRENDING/RANGING/VOLATILE/DEAD classification with confidence scores
+- **Market Regime** - TRENDING/RANGING/VOLATILE/DEAD classification with 0-1 confidence
 
 ### V1 Enhancements
 | Feature | Description |
@@ -24,8 +24,6 @@ Professional trading signal system for Indian markets (NSE) with AI-powered swin
 | **Percentile Scoring** | Top 8% signals vs static threshold |
 | **Signal Explainability** | `passed[]` / `failed[]` arrays in response |
 | **Sector Deduplication** | Max 2 signals per sector per scan |
-| **Options Hints** | Covered call suggestions in low-vol regimes |
-| **Economic Indicators** | RBI rates, inflation as regime inputs |
 
 ### V1.1 Enhancements
 | Feature | Description |
@@ -33,6 +31,16 @@ Professional trading signal system for Indian markets (NSE) with AI-powered swin
 | **Regime Confidence** | 0-1 probability scale for position scaling |
 | **Trade Logger** | CSV with MFE, MAE, bars held, regime at entry |
 | **Trade Stats API** | Win rate by regime, avg excursion metrics |
+
+### V1.2 Enhancements
+| Feature | Description |
+|---------|-------------|
+| **Backtest API** | `POST /api/backtest` for web-based runs |
+| **Sharpe Ratio** | Annualized risk-adjusted return metric |
+| **Expectancy** | (Win% × AvgWin) - (Loss% × AvgLoss) |
+| **STT Simulation** | 0.1% delivery tax deduction in results |
+| **Auto-Failover Alerts** | Telegram notification on source degradation |
+| **NSE Calendar** | Holiday detection for graceful scan skip |
 
 ---
 
@@ -88,7 +96,8 @@ npm run dev
 | `GET /api/stocks/{symbol}` | OHLCV data |
 | `GET /api/health` | Health + cache stats |
 | `GET /api/data-sources/health` | Data source status |
-| `GET /api/trade-stats` | **V1.1** Win rate by regime, MFE/MAE |
+| `GET /api/trade-stats` | Sharpe, expectancy, win rate by regime |
+| `POST /api/backtest` | **V1.2** Web-based backtesting |
 | `GET /api/economic-indicators` | RBI rates, inflation |
 | `GET /api/options-hint/{symbol}` | Covered call suggestions |
 | `POST /api/calculate-position` | Position sizing |
@@ -141,9 +150,9 @@ TradeEdgePro/
 │   │   ├── config.py               # Settings
 │   │   ├── data/
 │   │   │   ├── fetch_data.py       # Data with NSE fallback
-│   │   │   ├── data_source_monitor.py  # Health tracking
-│   │   │   ├── sector_benchmarks.py    # ATR/volume caps
-│   │   │   ├── trade_logger.py     # V1.1 Trade outcomes
+│   │   │   ├── data_source_monitor.py  # Auto-failover alerts
+│   │   │   ├── trade_logger.py     # Sharpe, expectancy, STT
+│   │   │   ├── nse_calendar.py     # Holiday detection
 │   │   │   └── economic_indicators.py  # RBI data
 │   │   ├── engine/
 │   │   │   ├── signal_generator.py # Parallel scanning
@@ -152,8 +161,7 @@ TradeEdgePro/
 │   │   │   └── market_regime.py    # 0-1 confidence scores
 │   │   └── strategies/
 │   │       ├── swing.py            # Pullback + breakout
-│   │       ├── intraday_bias.py    # Sector ATR caps
-│   │       └── options_hints.py    # Covered calls
+│   │       └── intraday_bias.py    # Sector ATR caps
 │   ├── run_backtest.py             # CLI backtest tool
 │   └── requirements.txt
 ├── frontend/
