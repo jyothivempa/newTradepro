@@ -31,7 +31,8 @@ class RegimeAnalysis:
     ema_slope: float
     trend_consistency: float
     confidence: float  # 0-100
-    change_pct: float = 0.0 # Daily % change
+    change_pct: float = 0.0  # Daily % change
+    economic_bias: str = "neutral"  # "hawkish", "neutral", "dovish"
     
     def to_dict(self) -> dict:
         return {
@@ -42,6 +43,7 @@ class RegimeAnalysis:
             "trendConsistency": round(self.trend_consistency, 1),
             "confidence": round(self.confidence, 0),
             "changePct": round(self.change_pct, 2),
+            "economicBias": self.economic_bias,
         }
 
 

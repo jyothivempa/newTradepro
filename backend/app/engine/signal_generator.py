@@ -275,10 +275,11 @@ def generate_signals(
     strategy_type: str = "swing",
     market_regime: str = "neutral",
     max_signals: int = 20,
-    max_workers: int = 20,
+    max_workers: int = None,  # Auto-calculated if None
 ) -> List[Dict[str, Any]]:
     """
     Generate signals with regime locking and persistence.
+    Supports adaptive worker scaling for larger universes.
     """
     import time
     start_time = time.time()
@@ -286,6 +287,14 @@ def generate_signals(
     stocks = load_stock_universe()
     if not stocks:
         return []
+    
+    # === Adaptive Worker Scaling ===
+    if max_workers is None:
+        if settings.adaptive_workers:
+            # Scale workers based on universe size: 10->20->40
+            max_workers = min(40, max(10, len(stocks) // 10))
+        else:
+            max_workers = settings.max_scan_workers
     
     # Lock Regime (Fetch once)
     regime = get_cached_regime()

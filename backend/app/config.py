@@ -40,6 +40,14 @@ class Settings(BaseSettings):
     data_source_failure_threshold: int = 2  # Failures before auto-switch
     data_source_recovery_period: int = 300  # Seconds before retrying degraded source
     
+    # Parallel Processing
+    max_scan_workers: int = 20  # Default workers for signal scan
+    adaptive_workers: bool = True  # Scale workers based on universe size
+    
+    # Feature Toggles (Optional Features)
+    enable_options_hints: bool = False  # Show covered call hints for low-vol
+    enable_economic_indicators: bool = False  # Use RBI data in regime
+    
     # Telegram Alerts (optional)
     telegram_bot_token: str = ""
     telegram_chat_id: str = ""

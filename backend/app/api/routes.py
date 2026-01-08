@@ -441,6 +441,86 @@ async def get_data_source_health():
     return failure_tracker.get_full_status()
 
 
+@router.get("/economic-indicators")
+async def get_economic_indicators_endpoint():
+    """
+    Get current RBI rates and economic context.
+    
+    Returns repo rate, CPI inflation, GDP growth, and rate bias.
+    Requires: enable_economic_indicators = true in config
+    """
+    if not settings.enable_economic_indicators:
+        raise HTTPException(
+            status_code=400, 
+            detail="Economic indicators disabled. Set enable_economic_indicators=true in .env"
+        )
+    
+    from app.data.economic_indicators import get_rbi_data
+    
+    data = get_rbi_data()
+    if data:
+        return data.to_dict()
+    raise HTTPException(status_code=503, detail="Unable to fetch economic data")
+
+
+@router.get("/options-hint/{symbol}")
+async def get_options_hint_endpoint(symbol: str):
+    """
+    Get options overlay suggestion for a stock signal.
+    
+    Returns covered call hint for low-volatility regimes.
+    Requires: enable_options_hints = true in config
+    """
+    if not settings.enable_options_hints:
+        raise HTTPException(
+            status_code=400,
+            detail="Options hints disabled. Set enable_options_hints=true in .env"
+        )
+    
+    from app.strategies.options_hints import get_options_hint, calculate_covered_call_strike
+    from app.engine.signal_generator import get_cached_regime, get_cached_data
+    
+    symbol = symbol.upper()
+    regime = get_cached_regime()
+    df = get_cached_data(symbol, "daily")
+    
+    if df is None or df.empty:
+        raise HTTPException(status_code=404, detail=f"No data for {symbol}")
+    
+    # Create a mock signal for the hint check
+    from app.strategies.base import Signal
+    current_price = df.iloc[-1]["Close"]
+    
+    mock_signal = Signal(
+        symbol=symbol,
+        signal_type="BUY",
+        entry_low=current_price * 0.99,
+        entry_high=current_price,
+        stop_loss=current_price * 0.95,
+        targets=[current_price * 1.05],
+    )
+    
+    hint = get_options_hint(mock_signal, regime)
+    
+    if hint:
+        strike = calculate_covered_call_strike(current_price, hint.suggested_strike_pct)
+        return {
+            "symbol": symbol,
+            "currentPrice": round(current_price, 2),
+            "regime": regime.regime.value,
+            "hint": hint.to_dict(),
+            "suggestedStrike": strike,
+        }
+    
+    return {
+        "symbol": symbol,
+        "currentPrice": round(current_price, 2),
+        "regime": regime.regime.value,
+        "hint": None,
+        "message": f"No options hint for {regime.regime.value} regime"
+    }
+
+
 # ===== Portfolio Tracker Endpoints =====
 
 class TradeRequest(BaseModel):
