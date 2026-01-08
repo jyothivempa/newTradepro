@@ -109,3 +109,29 @@ export function useHealth() {
 
     return { health, loading };
 }
+
+export function useSignalHistory(status = 'all', limit = 50) {
+    const [history, setHistory] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchHistory = async () => {
+            setLoading(true);
+            try {
+                const response = await signalApi.getSignalHistory(limit, status);
+                setHistory(response.data || []);
+            } catch (err) {
+                console.error('Failed to fetch history:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchHistory();
+        // Refresh every minute
+        const interval = setInterval(fetchHistory, 60000);
+        return () => clearInterval(interval);
+    }, [status, limit]);
+
+    return { history, loading };
+}

@@ -48,22 +48,30 @@ class RiskSnapshot:
         }
 
 
+
 class RiskManager:
     """
     Enhanced risk manager with:
     - Hard kill rules (RR, SL%, max trades)
     - Daily risk cap
     - Sector exposure limits
-    """
     
-    MAX_SECTOR_EXPOSURE = 30.0  # 30% max per sector
-    MAX_DAILY_RISK = 2.0  # 2% daily risk cap
+    V2.4: Now uses centralized YAML configuration
+    """
     
     def __init__(
         self,
         capital: float = 100000,
         risk_per_trade: float = 1.0,
         max_open_trades: int = None,
+    ):
+        # Load config
+        from app.config_loader import load_config
+        self.config = load_config()
+        
+        self.capital = capital
+        self.risk_per_trade = risk_per_trade
+        self.max_open_trades = max_open_trades or self.config.risk.max_open_trades
     ):
         self.capital = capital
         self.risk_per_trade = risk_per_trade
@@ -90,6 +98,60 @@ class RiskManager:
         )
         return (sector_value / self.capital) * 100 if self.capital > 0 else 0
     
+    def check_gap_risk(self, symbol: str, regime: str = "DEFAULT") -> tuple[bool, str]:
+        """
+        V2.3: Gap Stress Testing (India-Specific)
+        
+        Checks worst-case gap from 252-day history.
+        Indian markets gap aggressively - this prevents death-by-gap.
+        
+        Args:
+            symbol: Stock symbol
+            regime: Market regime for tolerance selection
+        
+        Returns:
+            (passed, reason)
+        """
+        try:
+            from app.data.fetch_data import fetch_daily_data
+            import pandas as pd
+            import numpy as np
+            
+            # Fetch 1 year of data
+            df = fetch_daily_data(symbol, period="1y")
+            if df is None or len(df) < 50:
+                # Not enough data - allow trade (benefit of doubt)
+                return True, ""
+            
+            # Calculate gaps: (Open - Previous Close) / Previous Close * 100
+            df['PrevClose'] = df['Close'].shift(1)
+            df['GapPct'] = abs((df['Open'] - df['PrevClose']) / df['PrevClose'] * 100)
+            
+            # Worst-case gap in history
+            worst_gap = df['GapPct'].max()
+            
+            # Get tolerance based on regime
+            regime_upper = regime.upper()
+            gap_tol = self.config.risk.gap_tolerance
+            tolerance = gap_tol.get("DEFAULT", 3.0)
+            for key in gap_tol:
+                if key in regime_upper:
+                    tolerance = gap_tol[key]
+                    break
+            
+            if worst_gap > tolerance:
+                reason = f"GAP_RISK_EXCEEDED: worst={worst_gap:.1f}% > {tolerance}% [{regime}]"
+                logger.warning(f"{symbol}: REJECTED - {reason}")
+                return False, reason
+            
+            logger.debug(f"{symbol}: Gap check passed (worst={worst_gap:.1f}% < {tolerance}%)")
+            return True, ""
+            
+        except Exception as e:
+            logger.error(f"Gap risk check failed for {symbol}: {e}")
+            # Fail-safe: allow trade if check fails
+            return True, ""
+    
     def validate_signal(self, signal: Signal, sector: str = "") -> tuple[bool, str]:
         """
         Validate signal against all risk rules.
@@ -109,13 +171,22 @@ class RiskManager:
             logger.warning(f"{signal.symbol}: REJECTED - {reason}")
             return False, reason
         
-        # Hard Kill 2: Stop Loss > 5%
+        # Hard Kill 2: Stop Loss % Cap (Regime Aware)
         entry = (signal.entry_low + signal.entry_high) / 2
         sl_distance = abs(entry - signal.stop_loss)
         sl_pct = (sl_distance / entry) * 100
         
-        if sl_pct > settings.max_stop_loss_pct:
-            reason = f"SL too wide ({sl_pct:.1f}% > {settings.max_stop_loss_pct}%)"
+        # Dynamic Max SL based on Regime
+        regime = (signal.market_regime or "NEUTRAL").upper()
+        if "VOLATILE" in regime:
+            current_max_sl = 10.0  # Allow wider stops in volatility
+        elif "TRENDING" in regime:
+            current_max_sl = 8.0   # Allow run room
+        else:
+            current_max_sl = settings.max_stop_loss_pct  # Default 5.0%
+        
+        if sl_pct > current_max_sl:
+            reason = f"SL too wide ({sl_pct:.1f}% > {current_max_sl}% [{regime}])"
             logger.warning(f"{signal.symbol}: REJECTED - {reason}")
             return False, reason
         
@@ -127,8 +198,9 @@ class RiskManager:
         
         # Hard Kill 4: Daily risk cap
         trade_risk = self.risk_per_trade
-        if self.daily_risk_used + trade_risk > self.MAX_DAILY_RISK:
-            reason = f"Daily risk cap exceeded ({self.daily_risk_used:.1f}% + {trade_risk}% > {self.MAX_DAILY_RISK}%)"
+        max_daily_risk = self.config.risk.daily_loss_limit_r
+        if self.daily_risk_used + trade_risk > max_daily_risk:
+            reason = f"Daily risk cap exceeded ({self.daily_risk_used:.1f}% + {trade_risk}% > {max_daily_risk}%)"
             logger.warning(f"{signal.symbol}: REJECTED - {reason}")
             return False, reason
         
@@ -139,12 +211,19 @@ class RiskManager:
             risk_amount = self.capital * (self.risk_per_trade / 100)
             new_position_value = risk_amount / (sl_pct / 100) if sl_pct > 0 else 0
             new_sector_pct = ((current_sector_exposure * self.capital / 100) + new_position_value) / self.capital * 100
+            max_sector_exposure = self.config.risk.max_sector_exposure_pct
             
-            if new_sector_pct > self.MAX_SECTOR_EXPOSURE:
-                reason = f"Sector exposure too high ({sector}: {new_sector_pct:.0f}% > {self.MAX_SECTOR_EXPOSURE}%)"
+            if new_sector_pct > max_sector_exposure:
+                reason = f"Sector exposure ({sector}) would exceed {max_sector_exposure}% ({new_sector_pct:.1f}%)"
                 logger.warning(f"{signal.symbol}: REJECTED - {reason}")
                 return False, reason
         
+        # Hard Kill 6: Gap Stress Test (V2.3)
+        gap_ok, gap_reason = self.check_gap_risk(signal.symbol, signal.market_regime or "DEFAULT")
+        if not gap_ok:
+            return False, gap_reason
+        
+        # All checks passed, signal is valid
         return True, ""
 
     def check_circuit_breaker(self, nifty_change_pct: float, signal_type: str = "BUY") -> tuple[bool, str]:

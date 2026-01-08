@@ -4,14 +4,16 @@ Strict versioning for all system components to ensure determinism.
 """
 
 SYSTEM_VERSIONS = {
-    "engine": "2.0.0",           # Core signal generation engine
-    "swing_strategy": "1.1.0",   # Swing strategy logic
-    "bias_engine": "1.0.0",      # Intraday Bias Engine
-    "risk_rules": "2.0.0",       # Risk management rules (circuit breaker, correlation)
-    "scoring_model": "1.1.0",    # Scoring weights and logic
-    "data_feed": "1.0.0",        # Data fetching and validation
-    "audit_trail": "2.0.0",      # Audit logging with hash-chain
-    "regime_engine": "2.0.0",    # Probabilistic market regime
+SYSTEM_VERSIONS = {
+    "engine": "2.1.0",           # Expectancy filter added
+    "swing_strategy": "2.0.0",   # Volatility-normalized stops
+    "bias_engine": "1.0.0",      
+    "risk_rules": "2.1.0",       # Regime-aware kill switch & SL caps
+    "scoring_model": "1.1.0",    
+    "data_feed": "1.0.0",        
+    "audit_trail": "2.0.0",      
+    "regime_engine": "2.0.0",    
+}
 }
 
 def get_system_version_header() -> str:

@@ -1,0 +1,88 @@
+# TradeEdge Pro Configuration
+# Centralized configuration for risk management, strategy, and regime controls
+
+# ===== Risk Management =====
+risk:
+  # Daily/Weekly Loss Limits (in R-multiples)
+  daily_loss_limit_r: 2.0
+  weekly_loss_limit_r: 6.0
+  
+  # Circuit Breaker
+  circuit_breaker_losses: 3  # Consecutive losses before pause
+  
+  # Position Limits
+  max_open_trades: 5
+  max_sector_exposure_pct: 30.0
+  
+  # Gap Stress Testing (India-Specific)
+  gap_tolerance:
+    TRENDING: 5.0    # Allow larger gaps in strong trends
+    RANGING: 3.0     # Tighter in choppy markets
+    VOLATILE: 2.0    # Strictest in volatile regime
+    DEAD: 1.0        # Minimal tolerance
+    DEFAULT: 3.0
+
+# ===== Strategy Thresholds =====
+strategy:
+  min_risk_reward: 2.0
+  max_stop_loss_pct: 5.0  # Base cap (regime adjusts dynamically)
+  
+  # Volatility-Normalized Stops (ATR multipliers)
+  atr_multipliers:
+    TRENDING: 2.0
+    RANGING: 1.5
+    VOLATILE: 2.5
+
+# ===== Market Regime Controls =====
+regime:
+  # Regime-Aware Daily Kill Switch
+  kill_switch_limits:
+    TRENDING: 3.0    # -3R daily loss in trending
+    RANGING: 1.5     # -1.5R in ranging
+    VOLATILE: 1.0    # -1R in volatile
+    DEAD: 0.0        # No trades in dead market
+  
+  # Position Size Multipliers by Regime
+  position_multipliers:
+    TRENDING: 1.0
+    RANGING: 0.6
+    VOLATILE: 0.5
+    DEAD: 0.0
+
+# ===== Drawdown Scaling =====
+drawdown:
+  brackets:
+    - threshold: 5.0
+      multiplier: 1.0
+    - threshold: 10.0
+      multiplier: 0.7
+    - threshold: 15.0
+      multiplier: 0.4
+    - threshold: 100.0   # > 15%
+      multiplier: 0.2
+
+# ===== Data & Caching =====
+data:
+  min_data_points: 60
+  max_retry_attempts: 3
+  retry_delay_seconds: 1.0
+  
+  cache:
+    daily_ttl_seconds: 86400    # 24 hours
+    intraday_ttl_seconds: 900   # 15 minutes
+
+# ===== Parallel Processing =====
+processing:
+  max_scan_workers: 20
+  adaptive_workers: true  # Scale workers based on universe size
+
+# ===== Walk-Forward Validation =====
+walkforward:
+  stability_threshold: 0.6  # Auto-warn if below
+  min_expectancy: 0.0
+
+# ===== Expectancy Tracker =====
+expectancy:
+  rolling_window_trades: 50
+  min_adequate_sample: 20
+  default_win_rate: 0.40  # Conservative fallback

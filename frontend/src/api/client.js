@@ -36,6 +36,10 @@ export const signalApi = {
         return api.get('/intraday-bias', { params });
     },
 
+    getSignalHistory: (limit = 50, status = 'all') => {
+        return api.get('/signals/history', { params: { limit, status, days: 7 } });
+    },
+
     // Stocks
     getStocks: (sector = null) => {
         const params = sector ? { sector } : {};

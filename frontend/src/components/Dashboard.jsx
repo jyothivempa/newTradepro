@@ -7,6 +7,8 @@ import StockChart from './StockChart';
 import RiskCalculator from './RiskCalculator';
 import { signalApi } from '../api/client';
 
+import ActivityLog from './ActivityLog';
+
 // Top NIFTY stocks for ticker
 const TICKER_STOCKS = ['RELIANCE', 'TCS', 'HDFCBANK', 'INFY', 'ICICIBANK', 'BHARTIARTL', 'ITC', 'SBIN'];
 
@@ -88,6 +90,7 @@ export default function Dashboard() {
     const tabs = [
         { id: 'swing', label: '📈 Swing Trades' },
         { id: 'intraday', label: '⚡ Intraday Bias (15m EOD)' },
+        { id: 'activity', label: '📋 Activity Log (Why No Trade?)' },
     ];
 
     const filteredSignals = signals.filter((s) =>
@@ -319,62 +322,69 @@ export default function Dashboard() {
                     )}
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Signals */}
-                    <div className="lg:col-span-2">
-                        {loading && (
-                            <div className="flex justify-center py-12">
-                                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600"></div>
+
+                {activeTab === 'activity' ? (
+                    <div className="mt-6">
+                        <ActivityLog />
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        {/* Signals */}
+                        <div className="lg:col-span-2">
+                            {loading && (
+                                <div className="flex justify-center py-12">
+                                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600"></div>
+                                </div>
+                            )}
+                            {error && <div className="card p-6 text-center text-red-600">{error}</div>}
+                            {!loading && !error && filteredSignals.length === 0 && (
+                                <div className="card p-8 text-center">
+                                    <div className="text-3xl mb-3">🛡️</div>
+                                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                                        {searchQuery ? `No signals for "${searchQuery}"` : 'No Qualifying Signals'}
+                                    </h3>
+                                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                                        Strict filters are protecting your capital.
+                                    </p>
+                                    {searchQuery && <button onClick={clearSearch} className="btn-primary mt-3">Clear Search</button>}
+                                </div>
+                            )}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {filteredSignals.map((signal) => (
+                                    <SignalCard key={signal.symbol} signal={signal} onViewChart={handleViewChart} onTakeTrade={handleTakeTrade} />
+                                ))}
                             </div>
-                        )}
-                        {error && <div className="card p-6 text-center text-red-600">{error}</div>}
-                        {!loading && !error && filteredSignals.length === 0 && (
-                            <div className="card p-8 text-center">
-                                <div className="text-3xl mb-3">🛡️</div>
-                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                                    {searchQuery ? `No signals for "${searchQuery}"` : 'No Qualifying Signals'}
-                                </h3>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">
-                                    Strict filters are protecting your capital.
-                                </p>
-                                {searchQuery && <button onClick={clearSearch} className="btn-primary mt-3">Clear Search</button>}
-                            </div>
-                        )}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {filteredSignals.map((signal) => (
-                                <SignalCard key={signal.symbol} signal={signal} onViewChart={handleViewChart} onTakeTrade={handleTakeTrade} />
-                            ))}
+                        </div>
+
+                        {/* Sidebar */}
+                        <div className="space-y-4">
+                            {riskSnapshot && (
+                                <div className="card p-3">
+                                    <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-2">Risk Exposure</h3>
+                                    <div className="grid grid-cols-2 gap-2 text-sm">
+                                        <div><span className="text-gray-500">Open</span> <span className="font-medium">{riskSnapshot.openTrades}/{riskSnapshot.maxTrades}</span></div>
+                                        <div><span className="text-gray-500">Daily</span> <span className="font-medium">{riskSnapshot.riskUsedToday}%</span></div>
+                                    </div>
+                                </div>
+                            )}
+                            {selectedSymbol ? (
+                                <StockChart symbol={selectedSymbol} signal={selectedSignal} />
+                            ) : (
+                                <div className="card p-4 text-center text-gray-500 dark:text-gray-400">
+                                    <div className="text-2xl mb-2">📊</div>
+                                    <p className="text-sm">Select a signal to view chart</p>
+                                </div>
+                            )}
+                            {showCalculator && <RiskCalculator />}
                         </div>
                     </div>
-
-                    {/* Sidebar */}
-                    <div className="space-y-4">
-                        {riskSnapshot && (
-                            <div className="card p-3">
-                                <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-2">Risk Exposure</h3>
-                                <div className="grid grid-cols-2 gap-2 text-sm">
-                                    <div><span className="text-gray-500">Open</span> <span className="font-medium">{riskSnapshot.openTrades}/{riskSnapshot.maxTrades}</span></div>
-                                    <div><span className="text-gray-500">Daily</span> <span className="font-medium">{riskSnapshot.riskUsedToday}%</span></div>
-                                </div>
-                            </div>
-                        )}
-                        {selectedSymbol ? (
-                            <StockChart symbol={selectedSymbol} signal={selectedSignal} />
-                        ) : (
-                            <div className="card p-4 text-center text-gray-500 dark:text-gray-400">
-                                <div className="text-2xl mb-2">📊</div>
-                                <p className="text-sm">Select a signal to view chart</p>
-                            </div>
-                        )}
-                        {showCalculator && <RiskCalculator />}
-                    </div>
-                </div>
+                )}
             </div>
 
             {/* Disclaimer */}
             <div className="fixed bottom-0 left-0 right-0 bg-yellow-50 dark:bg-yellow-900/30 border-t border-yellow-200 dark:border-yellow-800 py-1 px-4 text-center text-xs text-yellow-800 dark:text-yellow-200">
                 ⚠️ Educational purposes only – Not investment advice
             </div>
-        </div>
+        </div >
     );
 }

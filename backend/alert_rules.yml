@@ -1,0 +1,163 @@
+# Prometheus Alert Rules for TradeEdge Pro
+# Configure Prometheus to load this file for automated alerting
+
+groups:
+  - name: tradeedge_critical_alerts
+    interval: 30s
+    rules:
+      # 1. Scan Duration Anomaly (Performance degradation)
+      - alert: ScanDurationHigh
+        expr: tradeedge_signal_scan_duration_seconds > 300
+        for: 5m
+        labels:
+          severity: warning
+          component: signal_generator
+        annotations:
+          summary: "Signal scan taking too long"
+          description: "Scan duration {{ $value }}s exceeds 5-minute threshold. Check data source delays."
+      
+      # 2. Zero Signals Generated (Data pipeline failure)
+      - alert: NoSignalsGenerated
+        expr: increase(tradeedge_signals_generated_total[1d]) == 0
+        for: 2d
+        labels:
+          severity: critical
+          component: signal_generator
+        annotations:
+          summary: "No signals in 2 consecutive days"
+          description: "Signal generation pipeline may be broken. Check data sources and strategy logic."
+      
+      # 3. Expectancy Drift (Strategy degradation)
+      - alert: ExpectancyDrift
+        expr: tradeedge_expectancy_drift > 0.5
+        for: 1h
+        labels:
+          severity: warning
+          component: expectancy_tracker
+        annotations:
+          summary: "Expectancy drifting from historical baseline"
+          description: "Current expectancy deviating {{ $value }}x from backtest. Strategy may need re-validation."
+      
+      # 4. Cache Hit Ratio Low (Infrastructure issue)
+      - alert: CacheHitRateLow
+        expr: |
+          rate(tradeedge_cache_hits_total[5m]) / 
+          (rate(tradeedge_cache_hits_total[5m]) + rate(tradeedge_cache_misses_total[5m])) < 0.5
+        for: 10m
+        labels:
+          severity: warning
+          component: data_cache
+        annotations:
+          summary: "Cache hit rate below 50%"
+          description: "Cache performance degraded. Check Redis connectivity or cache size."
+      
+      # 5. Async Fetch Failure Rate (V2.6)
+      - alert: AsyncFetchDegraded
+        expr: |
+          rate(tradeedge_data_fetch_failures_total{source="async"}[5m]) / 
+          rate(tradeedge_data_fetch_total{source="async"}[5m]) > 0.05
+        for: 2m
+        labels:
+          severity: critical
+          component: async_fetcher
+        annotations:
+          summary: "Async fetch failure rate > 5%"
+          description: "System should degrade to sync mode. Check Yahoo Finance rate limits."
+      
+      # 6. WebSocket Connection Loss
+      - alert: WebSocketDisconnected
+        expr: tradeedge_websocket_connections == 0
+        for: 5m
+        labels:
+          severity: warning
+          component: websocket
+        annotations:
+          summary: "No active WebSocket connections"
+          description: "Real-time price feed disconnected. Frontend may show stale data."
+      
+      # 7. Daily Loss Limit Approaching
+      - alert: DailyLossLimitNear
+        expr: tradeedge_daily_loss_r_multiples > -1.5
+        labels:
+          severity: warning
+          component: risk_manager
+        annotations:
+          summary: "Daily loss approaching limit"
+          description: "Current daily loss: {{ $value }}R. Near kill switch threshold."
+      
+      # 8. Data Source Failover
+      - alert: DataSourceFailover
+        expr: increase(tradeedge_data_fetch_failures_total{source="yahoo"}[10m]) > 10
+        labels:
+          severity: info
+          component: data_fetcher
+        annotations:
+          summary: "Primary data source degraded"
+          description: "Yahoo Finance failing. System using fallback sources (NSE/Alpha Vantage)."
+
+  - name: tradeedge_business_alerts
+    interval: 1m
+    rules:
+      # Portfolio Concentration Risk
+      - alert: PortfolioConcentrationHigh
+        expr: tradeedge_portfolio_exposure_percent > 25
+        for: 5m
+        labels:
+          severity: warning
+          component: portfolio_risk
+        annotations:
+          summary: "Single sector exposure > 25%"
+          description: "Sector {{ $labels.sector }} exposure at {{ $value }}%. Risk of correlation blow-up."
+      
+      # Strategy Unstable (Walk-Forward)
+      - alert: StrategyUnstable
+        expr: tradeedge_walkforward_stability_score < 0.6
+        labels:
+          severity: critical
+          component: walkforward
+        annotations:
+          summary: "Strategy failed walk-forward validation"
+          description: "Stability score {{ $value }} < 0.6. SUSPEND TRADING recommended."
+
+---
+
+# Integration Instructions
+
+## 1. Prometheus Configuration
+Add to `prometheus.yml`:
+
+```yaml
+rule_files:
+  - "alert_rules.yml"
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ['localhost:9093']  # Alertmanager
+```
+
+## 2. Alertmanager (Optional but Recommended)
+Configure Alertmanager to send notifications:
+
+```yaml
+route:
+  receiver: 'telegram'
+  
+receivers:
+  - name: 'telegram'
+    telegram_configs:
+      - bot_token: YOUR_BOT_TOKEN
+        chat_id: YOUR_CHAT_ID
+        message: |
+          Alert: {{ .CommonAnnotations.summary }}
+          {{ .CommonAnnotations.description }}
+```
+
+## 3. Testing
+```bash
+# Test alert rules syntax
+promtool check rules alert_rules.yml
+
+# Fire test alert
+curl -X POST http://localhost:9090/-/reload
+```

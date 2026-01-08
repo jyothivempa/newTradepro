@@ -39,12 +39,21 @@ class PortfolioState:
     prev_regime: str = "NEUTRAL"
     current_regime: str = "NEUTRAL"
     total_capital: float = 100000.0   # Default capital base
-    date: str = field(default_factory=lambda: date.today().isoformat())
+    peak_capital: float = 100000.0    # V2.2: Track peak for drawdown
+    current_capital: float = 100000.0 # V2.2: Current equity
+    last_date: str = field(default_factory=lambda: date.today().isoformat())
+    
+    @property
+    def drawdown_pct(self) -> float:
+        """Calculate current drawdown as percentage"""
+        if self.peak_capital <= 0:
+            return 0.0
+        return ((self.peak_capital - self.current_capital) / self.peak_capital) * 100
     
     def reset_daily(self):
         """Reset daily counters (call at start of day)"""
         self.daily_pnl_r = 0.0
-        self.date = date.today().isoformat()
+        self.last_date = date.today().isoformat()
         # Note: consecutive_losses persists across days
         
     def reset_weekly(self):
@@ -77,16 +86,36 @@ class PortfolioRiskManager:
         "NEUTRAL": 0.7,
     }
     
+    # Regime-based Daily Loss Limits (V2.1)
+    DAILY_LIMITS = {
+        "TRENDING": 3.0,  # Aggressive: Risk 3R when conditions are perfect
+        "BULLISH": 3.0,
+        "RANGING": 1.5,   # Conservative: Risk 1.5R in chop
+        "SIDEWAYS": 1.5,
+        "VOLATILE": 1.0,  # Defensive: Risk 1R in high volatility
+        "DEAD": 0.0,      # Block: No risk allowed
+        "NEUTRAL": 1.5,
+    }
+    
+    # Drawdown-Adaptive Position Sizing (V2.2)
+    # Reduce position size as drawdown increases
+    DRAWDOWN_BRACKETS = [
+        (5.0, 1.0),    # DD < 5%: Full size
+        (10.0, 0.7),   # DD 5-10%: 70% size
+        (15.0, 0.4),   # DD 10-15%: 40% size
+        (100.0, 0.2),  # DD > 15%: 20% size (survival mode)
+    ]
+    
     def __init__(
         self,
-        daily_loss_limit_r: float = 2.0,
+        daily_loss_limit_r: float = 2.0,  # Base limit (overridden by regime)
         weekly_loss_limit_r: float = 6.0,
         max_same_sector_direction: int = 2,
         max_sector_exposure_pct: float = 0.30,
         consecutive_loss_limit: int = 3,
         correlation_threshold: float = 0.8,
     ):
-        self.daily_loss_limit_r = daily_loss_limit_r
+        self._base_daily_limit = daily_loss_limit_r
         self.weekly_loss_limit_r = weekly_loss_limit_r
         self.max_same_sector_direction = max_same_sector_direction
         self.max_sector_exposure_pct = max_sector_exposure_pct
@@ -96,7 +125,17 @@ class PortfolioRiskManager:
         
         # Cache for correlation calculations (expensive)
         self._correlation_cache: Dict[str, float] = {}
-    
+        
+    @property
+    def daily_loss_limit_r(self) -> float:
+        """Get daily loss limit based on current regime"""
+        regime = self.state.current_regime.upper()
+        # Find best match (handle complex strings like 'TRENDING (BULLISH)')
+        for key, limit in self.DAILY_LIMITS.items():
+            if key in regime:
+                return limit
+        return self._base_daily_limit
+
     def check_all_rules(
         self,
         sector: str,
@@ -110,9 +149,10 @@ class PortfolioRiskManager:
         Returns:
             (is_allowed, reason)
         """
-        # Rule 1: Daily Loss Kill Switch
-        if self._check_daily_loss_kill():
-            return False, f"Daily loss limit hit ({self.state.daily_pnl_r:.1f}R)"
+        # Rule 1: Daily Loss Kill Switch (Regime Aware)
+        limit = self.daily_loss_limit_r
+        if self.state.daily_pnl_r < -limit:
+            return False, f"Daily loss limit hit ({self.state.daily_pnl_r:.1f}R < -{limit}R [{self.state.current_regime}])"
             
         # Rule 2: Weekly Drawdown Kill Switch
         if self.state.weekly_pnl_r < -self.weekly_loss_limit_r:
@@ -135,14 +175,71 @@ class PortfolioRiskManager:
         if self._check_sector_exposure(sector, position_value):
             return False, f"Sector exposure limit (> {self.max_sector_exposure_pct:.0%}) for {sector}"
         
+        # V2.6: Capital Concentration Kill Switch
+        if new_position_risk > 0:
+            conc_ok, conc_reason = self.check_capital_concentration(new_position_risk)
+            if not conc_ok:
+                return False, conc_reason
+        
+        return True, ""
+    
+    def check_capital_concentration(self, new_position_risk: float) -> tuple[bool, str]:
+        """
+        V2.6: Capital Concentration Kill Switch
+        
+        Prevents false diversification by ensuring top 3 positions
+        don't exceed 60% of total portfolio risk.
+        
+        Args:
+            new_position_risk: Risk amount for proposed new position
+        
+        Returns:
+            (allowed, reason)
+        """
+        MAX_TOP3_CONCENTRATION = 60.0
+        
+        if not self.state.open_positions:
+            # First few positions, always OK
+            return True, ""
+        
+        # Extract risk amounts from open positions
+        position_risks = [
+            pos.get('risk_amount', 0) for pos in self.state.open_positions
+        ]
+        
+        # Add hypothetical new position
+        all_risks = position_risks + [new_position_risk]
+        
+        # Sort to get top 3
+        sorted_risks = sorted(all_risks, reverse=True)
+        top3_risk = sum(sorted_risks[:3])
+        total_risk = sum(all_risks)
+        
+        if total_risk == 0:
+            return True, ""
+        
+        concentration_pct = (top3_risk / total_risk) * 100
+        
+        if concentration_pct > MAX_TOP3_CONCENTRATION:
+            reason = (
+                f"CAPITAL_CONCENTRATION: Top 3 positions = {concentration_pct:.1f}% "
+                f"> {MAX_TOP3_CONCENTRATION}% of total risk"
+            )
+            logger.critical(reason)
+            return False, reason
+        
+        logger.debug(
+            f"Concentration check passed: Top3={concentration_pct:.1f}% < {MAX_TOP3_CONCENTRATION}%"
+        )
         return True, ""
     
     def _check_daily_loss_kill(self) -> bool:
-        """Block new signals if daily loss exceeds limit."""
-        if self.state.daily_pnl_r < -self.daily_loss_limit_r:
+        """Block new signals if daily loss exceeds regime-based limit."""
+        limit = self.daily_loss_limit_r
+        if self.state.daily_pnl_r < -limit:
             logger.warning(
                 f"🛑 Daily loss kill switch: {self.state.daily_pnl_r:.1f}R "
-                f"(limit: -{self.daily_loss_limit_r}R)"
+                f"(Regime: {self.state.current_regime}, Limit: -{limit}R)"
             )
             return True
         return False
@@ -296,6 +393,61 @@ class PortfolioRiskManager:
             Multiplier (0.0 to 1.0) for position scaling
         """
         return self.REGIME_MULTIPLIERS.get(regime.upper(), 0.7)
+    
+    def get_drawdown_multiplier(self) -> float:
+        """
+        Get position size multiplier based on current drawdown (V2.2).
+        
+        Brackets:
+        - DD < 5%: 1.0x (Full size)
+        - DD 5-10%: 0.7x
+        - DD 10-15%: 0.4x
+        - DD > 15%: 0.2x (Survival mode)
+        
+        Returns:
+            Multiplier (0.2 to 1.0) for position scaling
+        """
+        dd = self.state.drawdown_pct
+        
+        for threshold, multiplier in self.DRAWDOWN_BRACKETS:
+            if dd < threshold:
+                return multiplier
+        
+        return 0.2  # Fallback to survival mode
+    
+    def get_combined_multiplier(self, regime: str = None) -> float:
+        """
+        Get combined position multiplier (Regime × Drawdown).
+        
+        This stacks both adjustments for maximum risk protection.
+        """
+        regime = regime or self.state.current_regime
+        regime_mult = self.get_regime_multiplier(regime)
+        dd_mult = self.get_drawdown_multiplier()
+        
+        combined = regime_mult * dd_mult
+        
+        if combined < 1.0:
+            logger.debug(
+                f"Position scaled: Regime={regime_mult:.1f}x, DD={dd_mult:.1f}x → {combined:.2f}x"
+            )
+        
+        return round(combined, 2)
+    
+    def update_equity(self, pnl_amount: float):
+        """
+        Update current capital after trade result.
+        Tracks peak for drawdown calculation.
+        """
+        self.state.current_capital += pnl_amount
+        
+        # Update peak if new high
+        if self.state.current_capital > self.state.peak_capital:
+            self.state.peak_capital = self.state.current_capital
+        
+        dd = self.state.drawdown_pct
+        if dd > 5:
+            logger.warning(f"📉 Drawdown: {dd:.1f}% | Multiplier: {self.get_drawdown_multiplier()}x")
     
     def reset_circuit_breaker(self):
         """Manually reset circuit breaker (use after review)"""

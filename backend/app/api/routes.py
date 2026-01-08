@@ -212,6 +212,91 @@ async def get_intraday_bias_signals(
 
 
 
+class SignalHistoryResponse(BaseModel):
+    id: int
+    symbol: str
+    strategy: str
+    signal_type: Optional[str] = None
+    score: int
+    rejected: bool
+    rejectionReason: Optional[str] = None
+    timestamp: str
+    metadata: Optional[Dict[str, Any]] = None
+    # Optional fields for accepted signals
+    entry_low: Optional[float] = None
+    entry_high: Optional[float] = None
+    stop_loss: Optional[float] = None
+    targets: Optional[List[float]] = None  # JSON string in DB, simplified here
+    risk_reward: Optional[float] = None
+
+
+@router.get("/signals/history", response_model=List[SignalHistoryResponse])
+async def get_signal_history_api(
+    strategy: Optional[str] = Query(None),
+    symbol: Optional[str] = Query(None),
+    days: int = Query(7, ge=1, le=90),
+    status: str = Query("all", regex="^(all|accepted|rejected)$")
+):
+    """
+    Get signal history (accepted & rejected).
+    """
+    include_rejected = status in ("all", "rejected")
+    
+    # If status is specific, we might need to filter manually or update get_signal_history
+    # get_signal_history has include_rejected=True/False (bool)
+    # It doesn't support "rejected only" natively efficiently without SQL change, 
+    # but we can filter in python for now or just rely on 'include_rejected' meaning 'all'.
+    # Update: get_signal_history returns all if include_rejected=True.
+    
+    signals = get_signal_history(
+        symbol=symbol,
+        strategy=strategy,
+        days=days,
+        include_rejected=include_rejected
+    )
+    
+    # Filter for 'accepted' or 'rejected' specifically if needed
+    if status == "accepted":
+        signals = [s for s in signals if not s["rejected"]]
+    elif status == "rejected":
+        signals = [s for s in signals if s["rejected"]]
+        
+    # Standardize keys (DB uses snake_case, API camelCase convention desired but model handles it)
+    response = []
+    for s in signals:
+        try:
+            # Parse JSON fields
+            meta = None
+            if s.get("metadata"):
+                try:
+                    import json
+                    meta = json.loads(s["metadata"])
+                except:
+                    pass
+            
+            response.append({
+                "id": s["id"],
+                "symbol": s["symbol"],
+                "strategy": s["strategy"],
+                "signal_type": s["signal_type"],
+                "score": s["score"],
+                "rejected": bool(s["rejected"]),
+                "rejectionReason": s["rejection_reason"],
+                "timestamp": s["timestamp"],
+                "metadata": meta,
+                "entry_low": s["entry_low"],
+                "entry_high": s["entry_high"],
+                "stop_loss": s["stop_loss"],
+                "targets": None, # Skip parsing targets for list view to save perf
+                "risk_reward": s["risk_reward"]
+            })
+        except Exception as e:
+            logger.error(f"Error parsing signal history item {s.get('id')}: {e}")
+            continue
+            
+    return response
+
+
 @router.get("/swing", response_model=List[SignalResponse])
 async def get_swing_signals(
     limit: int = Query(10, ge=1, le=50),
@@ -405,6 +490,45 @@ async def run_backtest(
         return result.to_dict()
     except Exception as e:
         logger.error(f"Backtest failed for {symbol}: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/backtest/walkforward/{symbol}")
+async def run_walkforward_validation(
+    symbol: str,
+    strategy: str = Query("swing", description="Strategy: swing or intraday_bias"),
+    train_months: int = Query(18, ge=6, le=36, description="Training window months"),
+    test_months: int = Query(6, ge=3, le=12, description="Testing window months"),
+):
+    """
+    Run Walk-Forward Validation for robust strategy testing.
+    
+    Walk-Forward prevents overfitting by:
+    1. Training on historical data (18 months default)
+    2. Testing on out-of-sample data (6 months default)
+    3. Rolling forward and repeating
+    
+    Returns:
+    - stabilityScore: Consistency across windows (0-1, higher = better)
+    - avgTestExpectancy: Average out-of-sample edge (R-multiple)
+    - worstWindowDD: Maximum drawdown in any test period
+    - regimeExpectancy: Performance by market regime
+    - verdict: ROBUST / MARGINAL / WEAK
+    """
+    from app.engine.walkforward import run_walkforward
+    
+    symbol = symbol.upper()
+    
+    try:
+        result = run_walkforward(
+            symbol=symbol,
+            strategy=strategy,
+            train_months=train_months,
+            test_months=test_months,
+        )
+        return result.to_dict()
+    except Exception as e:
+        logger.error(f"Walk-Forward failed for {symbol}: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 

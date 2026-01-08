@@ -27,7 +27,8 @@ class Settings(BaseSettings):
     cache_intraday_ttl: int = 900  # 15 minutes
     
     # Strategy Thresholds
-    min_signal_score: int = 70
+    # DEPRECATED V2.3: Score is now ranking-only, not a gate
+    # min_signal_score: int = 70  # Use expectancy + risk checks instead
     min_risk_reward: float = 2.0
     max_stop_loss_pct: float = 5.0
     max_open_trades: int = 5

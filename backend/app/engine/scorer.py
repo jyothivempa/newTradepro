@@ -3,7 +3,7 @@ TradeEdge Pro - Enhanced Signal Scorer
 Context-aware scoring with breakdown for explainability
 """
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 import pandas as pd
 
 from app.strategies.base import Signal
@@ -55,7 +55,7 @@ class SignalScorer:
         self.market_regime = market_regime
         self.nifty_trend = nifty_trend
     
-    def calculate_score(self, signal: Signal, extra_context: dict = None) -> tuple[int, ScoreBreakdown]:
+    def calculate_score(self, signal: Signal, extra_context: Optional[Dict] = None) -> Tuple[int, ScoreBreakdown]:
         """
         Calculate context-aware score with pro-level breakdown.
         
@@ -297,8 +297,12 @@ class SignalScorer:
         return breakdown.final_score, breakdown
     
     def passes_threshold(self, score: int) -> bool:
-        """Check if score passes minimum threshold"""
-        return score >= settings.min_signal_score
+        """
+        DEPRECATED V2.3: Score is now ranking-only, not a gate.
+        Use expectancy and risk checks instead.
+        """
+        # Always return True - score no longer gates trades
+        return True
 
 
 def get_nifty_trend() -> str:

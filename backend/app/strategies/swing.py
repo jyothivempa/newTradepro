@@ -106,6 +106,16 @@ class SwingStrategy(BaseStrategy):
         high_20 = latest['High_20']
         low_20 = latest['Low_20']
         
+        # ===== REGIME ANALYSIS (V2.0) =====
+        from app.engine.regime_engine import classify_regime_v2, MarketRegime
+        regime_vector = classify_regime_v2(df)
+        current_regime = regime_vector.dominant
+        
+        # Filter: Skip unsupported regimes
+        if current_regime == MarketRegime.DEAD:
+            logger.debug(f"{symbol}: Market is DEAD. Skipping.")
+            return None
+        
         # ===== SIGNAL DETERMINATION (Multiple Entry Methods) =====
         signal_type = None
         entry_method = None
@@ -159,27 +169,39 @@ class SwingStrategy(BaseStrategy):
         if not signal_type:
             return None
         
-        # ===== CALCULATE ENTRY, SL, TARGETS =====
+        # ===== CALCULATE ENTRY, SL, TARGETS (Volatility-Normalized) =====
         atr = latest['ATR']
+        
+        # Determine ATR Multiplier (k) based on Regime
+        # TRENDING: 2.0 (Wide to let it run)
+        # RANGING: 1.5 (Tighter)
+        # VOLATILE: 2.5 (Widest to avoid noise)
+        regime_multipliers = {
+            MarketRegime.TRENDING: 2.0,
+            MarketRegime.RANGING: 1.5,
+            MarketRegime.VOLATILE: 2.5,  # Planned: 2.5
+            MarketRegime.DEAD: 1.0
+        }
+        k = regime_multipliers.get(current_regime, 2.0)
         
         if signal_type == "BUY":
             # Entry zone
             entry_low = price
             entry_high = price + (atr * 0.5)
             
-            # Stop loss based on entry method
+            # Stop loss logic overrides
             if entry_method == "Pullback to 20EMA":
-                # Tighter stop for pullbacks
-                stop_loss = ema20 - (atr * 1.5)
-            elif entry_method == "Support Bounce" and support_levels:
-                # Stop below support
-                stop_loss = support_levels[0].level - (atr * 0.5)
+                # Pullbacks get slightly tighter stops even in trending
+                stop_loss = ema20 - (atr * max(1.5, k * 0.8)) 
+            elif entry_method.startswith("Support Bounce"):
+                 if support_levels:
+                    stop_loss = support_levels[0].level - (atr * 0.5)
+                 else:
+                    stop_loss = price - (atr * k)
             else:
-                # Standard: 2x ATR or below 50EMA
-                sl_atr = price - (atr * 2)
-                sl_ema = ema50 - (atr * 0.5)
-                stop_loss = max(sl_atr, sl_ema)
-            
+                # Standard Volatility Stop
+                stop_loss = price - (atr * k)
+
             # Targets: 1:2 and 1:3 R:R
             risk = price - stop_loss
             target1 = price + (risk * 2)
@@ -190,11 +212,9 @@ class SwingStrategy(BaseStrategy):
             entry_high = price
             
             if entry_method == "Pullback to 20EMA":
-                stop_loss = ema20 + (atr * 1.5)
+                stop_loss = ema20 + (atr * max(1.5, k * 0.8))
             else:
-                sl_atr = price + (atr * 2)
-                sl_ema = ema50 + (atr * 0.5)
-                stop_loss = min(sl_atr, sl_ema)
+                stop_loss = price + (atr * k)
             
             risk = stop_loss - price
             target1 = price - (risk * 2)
@@ -225,30 +245,27 @@ class SwingStrategy(BaseStrategy):
             pattern_info = f" | {bearish_patterns[0].name}"
         
         # === CALCULATE CONFIDENCE ===
-        # High: Strong ADX + Volume + Weekly aligned
-        # Medium: Good ADX or Volume
-        # Low: Marginal conditions
         confidence_score = 0
-        if adx > 35:
-            confidence_score += 2
-        elif adx > 25:
-            confidence_score += 1
-        if volume_ratio > 2.0:
-            confidence_score += 2
-        elif volume_ratio > 1.5:
-            confidence_score += 1
-        if weekly_trend == ("bullish" if signal_type == "BUY" else "bearish"):
-            confidence_score += 1
-        if momentum['quality'] == 'strong':
-            confidence_score += 1
+        if adx > 35: confidence_score += 2
+        elif adx > 25: confidence_score += 1
         
-        confidence = "High" if confidence_score >= 5 else "Medium" if confidence_score >= 3 else "Low"
+        if volume_ratio > 2.0: confidence_score += 2
+        elif volume_ratio > 1.5: confidence_score += 1
+        
+        if weekly_trend == ("bullish" if signal_type == "BUY" else "bearish"): confidence_score += 1
+        if momentum['quality'] == 'strong': confidence_score += 1
+        
+        # Add Regime Confidence
+        if current_regime == MarketRegime.TRENDING: confidence_score += 2
+        elif current_regime == MarketRegime.VOLATILE: confidence_score -= 1
+        
+        confidence = "High" if confidence_score >= 6 else "Medium" if confidence_score >= 4 else "Low"
         
         # === DETERMINE INVALIDATION CONDITION ===
         if signal_type == "BUY":
-            invalidated_if = f"Close below {ema20:.0f} (20 EMA)"
+            invalidated_if = f"Close below {stop_loss:.2f}"
         else:
-            invalidated_if = f"Close above {ema20:.0f} (20 EMA)"
+            invalidated_if = f"Close above {stop_loss:.2f}"
         
         signal = Signal(
             symbol=symbol,
@@ -264,13 +281,12 @@ class SwingStrategy(BaseStrategy):
             rsi_value=rsi,
             adx_value=adx,
             volume_ratio=volume_ratio,
-            # New metadata
             confidence=confidence,
-            market_regime=weekly_trend.upper() if weekly_trend != "neutral" else "RANGING",
+            market_regime=current_regime.value,
             entry_method=entry_method,
             invalidated_if=invalidated_if,
         )
         
-        logger.info(f"{symbol}: {signal_type} via {entry_method} ({confidence} confidence, R:R {risk_reward:.1f})")
+        logger.info(f"{symbol}: {signal_type} ({current_regime}) via {entry_method} | ATR x{k} | Conf: {confidence}")
         return signal
 

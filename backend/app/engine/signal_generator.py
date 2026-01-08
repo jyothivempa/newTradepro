@@ -1,26 +1,27 @@
 """
-TradeEdge Pro - Enhanced Signal Generator
-With NIFTY trend filter and score breakdown
+TradeEdge Pro - Enhanced Signal Generator (V2.3)
+With parallel scanning, intelligent caching, and comprehensive risk validation.
 """
 import json
 from pathlib import Path
-from typing import List, Optional, Dict, Any, Tuple
+from typing import List, Dict, Optional, Any, Tuple
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import datetime
+from datetime import datetime, timedelta
 import pandas as pd
+import time
 
 from app.strategies.base import Signal
 from app.strategies.intraday_bias import IntradayBiasStrategy
 from app.strategies.swing import SwingStrategy
 from app.engine.scorer import score_signal, ScoreBreakdown
-from app.engine.risk_manager import RiskManager
-from app.data.fetch_data import fetch_daily_data, fetch_intraday_data
-from app.data.cache_manager import cache, get_daily_cache_key, get_intraday_cache_key
+from app.engine.risk_manager import risk_manager
+from app.engine.portfolio_risk import portfolio_risk
+from app.data.fetch_data import fetch_daily_data, get_cached_data
 from app.data.archive import archive_signal
 from app.utils.notifications import send_telegram_alert, is_telegram_configured
 from app.config import get_settings
 from app.utils.logger import get_logger
-from app.engine.market_regime import get_regime_for_nifty, RegimeAnalysis
+from app.engine.regime_engine import classify_regime_v2, RegimeAnalysis
 
 logger = get_logger(__name__)
 settings = get_settings()
@@ -29,7 +30,7 @@ settings = get_settings()
 _nifty_regime_cache = {"regime": None, "timestamp": None}
 
 
-def load_stock_universe() -> List[dict]:
+def load_stock_universe() -> List[Dict[str, str]]:
     """Load stock universe based on config"""
     universe_map = {
         "NIFTY100": "nifty100.json",
@@ -50,7 +51,7 @@ def load_stock_universe() -> List[dict]:
         return []
 
 
-def get_cached_regime() -> RegimeAnalysis:
+def get_cached_regime() -> Optional[RegimeAnalysis]:
     """Get NIFTY regime with 15-min cache"""
     global _nifty_regime_cache
     
@@ -61,36 +62,9 @@ def get_cached_regime() -> RegimeAnalysis:
             return _nifty_regime_cache["regime"]
     
     # Fetch fresh
-    regime = get_regime_for_nifty()
+    regime = classify_regime_v2()
     _nifty_regime_cache = {"regime": regime, "timestamp": now}
     return regime
-
-
-def get_cached_data(symbol: str, data_type: str = "daily") -> Optional[pd.DataFrame]:
-    """Get data from cache or fetch fresh"""
-    if data_type == "daily":
-        cache_key = get_daily_cache_key(symbol)
-        cached = cache.get(cache_key)
-        
-        if cached is not None:
-            return cached
-        
-        df = fetch_daily_data(symbol)
-        if df is not None:
-            cache.set(cache_key, df, settings.cache_daily_ttl)
-        return df
-    
-    else:  # intraday
-        cache_key = get_intraday_cache_key(symbol)
-        cached = cache.get(cache_key)
-        
-        if cached is not None:
-            return cached
-        
-        df = fetch_intraday_data(symbol)
-        if df is not None:
-            cache.set(cache_key, df, settings.cache_intraday_ttl)
-        return df
 
 
 def validate_liquidity(df: pd.DataFrame, symbol: str) -> Tuple[bool, str]:
@@ -118,132 +92,152 @@ def validate_liquidity(df: pd.DataFrame, symbol: str) -> Tuple[bool, str]:
     return True, ""
 
 
-def analyze_stock_swing(
+def analyze_symbol(
     symbol: str, 
-    sector: str,
-    regime: RegimeAnalysis
+    strategy_type: str,
+    regime: RegimeAnalysis,
+    sector: str
 ) -> Optional[Dict[str, Any]]:
     """
-    Analyze single stock for swing signal.
-    Returns candidate dict if valid score, else None (archives rejection).
+    Analyze single stock for a given strategy.
+    Returns candidate dict if valid, else None (archives rejection).
     Risk Validation is deferred to batch processing.
     """
     try:
-        df = get_cached_data(symbol, "daily")
-        if df is None:
-            return None
-        
-        # Liquidity Gate
-        is_liquid, reason = validate_liquidity(df, symbol)
-        if not is_liquid:
-            archive_signal(
-                symbol=symbol,
-                strategy="swing",
-                score=0,
-                rejected=True,
-                rejection_reason=f"NO_LIQUIDITY: {reason}",
-                nifty_trend=regime.regime.value if regime else "neutral",
-                timestamp=datetime.now().isoformat()
-            )
-            return None
+        if strategy_type == "swing":
+            df = get_cached_data(symbol, "daily")
+            if df is None:
+                return None
             
-        # Market Circuit Breaker
-        # This is a HARD global rule, so we can check it here to save compute.
-        # But we use RiskManager for it. 
-        # check_circuit_breaker is stateless (depends only on nifty_change_pct).
-        rm = RiskManager()
-        is_safe, cb_reason = rm.check_circuit_breaker(regime.change_pct, "BUY")
-        if not is_safe:
-             archive_signal(
-                symbol=symbol,
-                strategy="swing",
-                score=0,
-                rejected=True,
-                rejection_reason=f"NO_TRADE_REGIME: {cb_reason}",
-                nifty_trend=regime.regime.value if regime else "neutral",
-                timestamp=datetime.now().isoformat()
-            )
-             return None
-        
-        strategy = SwingStrategy()
-        signal = strategy.analyze(df, symbol)
-        
-        if signal:
-            # Score with market context
-            start_scan_regime = regime.regime.value if regime else "neutral"
-            
-            signal, breakdown = score_signal(signal, start_scan_regime, "neutral")
-            
-            # Check score threshold (First Pass)
-            if signal.score < settings.min_signal_score:
-                 archive_signal(
-                    symbol=signal.symbol,
-                    strategy=signal.strategy,
-                    signal_type=signal.signal_type,
-                    score=signal.score,
-                    score_breakdown=breakdown.to_dict(),
-                    entry_low=signal.entry_low,
-                    entry_high=signal.entry_high,
-                    stop_loss=signal.stop_loss,
-                    targets=signal.targets,
-                    risk_reward=signal.risk_reward,
-                    trend_strength=signal.trend_strength,
-                    sector=sector,
+            # Liquidity Gate
+            is_liquid, reason = validate_liquidity(df, symbol)
+            if not is_liquid:
+                archive_signal(
+                    symbol=symbol,
+                    strategy="swing",
+                    score=0,
                     rejected=True,
-                    rejection_reason=f"NO_EDGE: Score {signal.score} < {settings.min_signal_score}",
-                    nifty_trend=regime.regime.value,
-                    metadata={
-                        "confidence": signal.confidence,
-                        "marketRegime": signal.market_regime,
-                        "invalidatedIf": signal.invalidated_if,
-                        "sectorRs": signal.sector_rs
-                    }
+                    rejection_reason=f"NO_LIQUIDITY: {reason}",
+                    nifty_trend=regime.regime.value if regime else "neutral",
+                    timestamp=datetime.now().isoformat()
+                )
+                return None
+                
+            # Market Circuit Breaker
+            # This is a HARD global rule, so we can check it here to save compute.
+            # But we use RiskManager for it. 
+            # check_circuit_breaker is stateless (depends only on nifty_change_pct).
+            is_safe, cb_reason = risk_manager.check_circuit_breaker(regime.change_pct, "BUY")
+            if not is_safe:
+                 archive_signal(
+                    symbol=symbol,
+                    strategy="swing",
+                    score=0,
+                    rejected=True,
+                    rejection_reason=f"NO_TRADE_REGIME: {cb_reason}",
+                    nifty_trend=regime.regime.value if regime else "neutral",
+                    timestamp=datetime.now().isoformat()
                 )
                  return None
-
-            # Valid Candidate (Risk Check Pending)
-            return {
-                "signal": signal,
-                "breakdown": breakdown,
-                "sector": sector,
-                "regime": regime  # Pass regime for later archiving
-            }
             
-    except Exception as e:
-        logger.error(f"Error analyzing {symbol} (swing): {e}")
-    
-    return None
-
-
-def analyze_stock_intraday(
-    symbol: str,
-    sector: str,
-    regime: RegimeAnalysis
-) -> Optional[Dict[str, Any]]:
-    """Analyze single stock for intraday bias. Returns candidate or None."""
-    try:
-        df = get_cached_data(symbol, "intraday")
-        if df is None:
-            return None
+            strategy = SwingStrategy()
+            signal = strategy.analyze(df, symbol)
+            
+            if signal:
+                # Score with market context
+                start_scan_regime = regime.regime.value if regime else "neutral"
+                
+                signal, breakdown = score_signal(signal, start_scan_regime, "neutral")
+                
+                # === V2.3: Adaptive Expectancy Filter (Regime-Aware) ===
+                # Use rolling win rate from actual trade history instead of static 40%
+                try:
+                    from app.engine.expectancy_tracker import get_expectancy_estimate
+                    
+                    # Get adaptive estimate for this strategy/regime combination
+                    estimate = get_expectancy_estimate(
+                        strategy=signal.strategy,
+                        regime=signal.market_regime or "ALL",
+                        symbol_type="stock"
+                    )
+                    
+                    # Use tracked win rate if sample size is adequate, else conservative default
+                    if estimate.sample_size_adequate:
+                        win_rate_est = estimate.win_rate
+                        logger.debug(f"{symbol}: Using tracked win rate {win_rate_est:.1%} (n={estimate.total_trades})")
+                    else:
+                        win_rate_est = 0.40  # Conservative default for new strategies
+                        logger.debug(f"{symbol}: Using default win rate {win_rate_est:.1%} (insufficient data)")
+                    
+                    # Calculate expectancy with adaptive win rate
+                    expectancy = (win_rate_est * signal.risk_reward) - ((1 - win_rate_est) * 1.0)
+                    
+                except Exception as e:
+                    logger.error(f"Expectancy tracker failed, using static 40%: {e}")
+                    win_rate_est = 0.40
+                    expectancy = (win_rate_est * signal.risk_reward) - ((1 - win_rate_est) * 1.0)
+                
+                if expectancy < 0:
+                    archive_signal(
+                        symbol=signal.symbol,
+                        strategy=signal.strategy,
+                        signal_type=signal.signal_type,
+                        score=signal.score,
+                        score_breakdown=breakdown.to_dict(),
+                        entry_low=signal.entry_low,
+                        entry_high=signal.entry_high,
+                        stop_loss=signal.stop_loss,
+                        targets=signal.targets,
+                        risk_reward=signal.risk_reward,
+                        trend_strength=signal.trend_strength,
+                        sector=sector,
+                        rejected=True,
+                        rejection_reason=f"NEGATIVE_EXPECTANCY: {expectancy:.2f}R (Win% {win_rate_est:.0%})",
+                        nifty_trend=regime.regime.value if regime else "neutral",
+                        metadata={
+                            "confidence": signal.confidence,
+                            "marketRegime": signal.market_regime,
+                            "expectancy": round(expectancy, 2)
+                        }
+                    )
+                    logger.info(f"{symbol}: Rejected due to negative expectancy ({expectancy:.2f}R)")
+                    return None
+            
+            # V2.3: Score is now RANKING ONLY, not a gate
+            # Expectancy + Risk checks are the true gates
+            # Score will be used later to prioritize capital allocation
+            
+            # Valid Candidate (Risk Check Pending)
+                return {
+                    "signal": signal,
+                    "breakdown": breakdown,
+                    "sector": sector,
+                    "regime": regime  # Pass regime for later archiving
+                }
         
-        # V1.3: Use Bias Engine (No P&L claims)
-        strategy = IntradayBiasStrategy() # Aliased to IntradayBiasEngine
-        bias_result = strategy.analyze(df, symbol, sector)
-        
-        if bias_result:
-            # Skip scoring for bias generator - use confidence directly
-            if bias_result.confidence < 0.6:  # Min confidence filter
-                 return None
+        elif strategy_type == "intraday":
+            df = get_cached_data(symbol, "intraday")
+            if df is None:
+                return None
+            
+            # V1.3: Use Bias Engine (No P&L claims)
+            strategy = IntradayBiasStrategy() # Aliased to IntradayBiasEngine
+            bias_result = strategy.analyze(df, symbol, sector)
+            
+            if bias_result:
+                # Skip scoring for bias generator - use confidence directly
+                if bias_result.confidence < 0.6:  # Min confidence filter
+                     return None
 
-            return {
-                "signal": bias_result, # IntradayBias object
-                "breakdown": None, # No score breakdown
-                "sector": sector,
-                "regime": regime
-            }
+                return {
+                    "signal": bias_result, # IntradayBias object
+                    "breakdown": None, # No score breakdown
+                    "sector": sector,
+                    "regime": regime
+                }
     
     except Exception as e:
-        logger.error(f"Error analyzing {symbol} (intraday): {e}")
+        logger.error(f"Error analyzing {symbol} ({strategy_type}): {e}")
     
     return None
 
@@ -279,7 +273,8 @@ def filter_by_percentile(results: list, percentile: float = 0.92) -> list:
 def generate_signals(
     strategy_type: str = "swing",
     market_regime: str = "neutral",
-    max_signals: int = 20,
+    max_signals: int = 10,
+    sector_filter: Optional[str] = None,
     max_workers: int = None,  # Auto-calculated if None
 ) -> List[Dict[str, Any]]:
     """
