@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom base styles */
+:root {
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  font-family: var(--font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom utility classes */
+@layer components {
+  .card {
+    @apply bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700;
+  }
+
+  .btn-primary {
+    @apply px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors;
+  }
+
+  .btn-secondary {
+    @apply px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium rounded-lg transition-colors;
+  }
+
+  .badge-buy {
+    @apply px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 font-semibold rounded-full text-sm;
+  }
+
+  .badge-sell {
+    @apply px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 font-semibold rounded-full text-sm;
+  }
+
+  .input {
+    @apply w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all;
+  }
+
+  .tab {
+    @apply px-4 py-2 font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 border-b-2 border-transparent transition-colors;
+  }
+
+  .tab-active {
+    @apply text-primary-600 dark:text-primary-400 border-primary-600 dark:border-primary-400;
+  }
+}
+
+/* Score gradient backgrounds */
+.score-high {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+}
+
+.score-medium {
+  background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+}
+
+.score-low {
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+}
+
+/* Glass effect */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+/* Marquee animation for ticker */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}

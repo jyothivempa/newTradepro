@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  # Backend API
+  backend:
+    build: ./backend
+    container_name: tradeedge-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
+    depends_on:
+      - redis
+    volumes:
+      - ./backend/data:/app/app/data
+      - ./backend/logs:/app/logs
+
+  # Redis Cache
+  redis:
+    image: redis:alpine
+    container_name: tradeedge-redis
+    ports:
+      - "6379:6379"
+
+  # Frontend UI
+  frontend:
+    build: ./frontend
+    container_name: tradeedge-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend

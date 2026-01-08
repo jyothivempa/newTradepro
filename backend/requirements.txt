@@ -1,0 +1,26 @@
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+yfinance>=0.2.36
+pandas>=2.2.0
+numpy>=1.26.0
+pandas-ta>=0.3.14b
+redis>=5.0.0
+python-multipart>=0.0.9
+pydantic-settings>=2.1.0
+python-dotenv>=1.0.0
+loguru>=0.7.2
+
+# Advanced Features
+textblob>=0.17.1
+feedparser>=6.0.10
+httpx>=0.26.0
+pytest>=8.0.0
+pytest-cov>=4.1.0
+pytest-asyncio>=0.23.0
+
+# Automation
+apscheduler>=3.10.4
+python-telegram-bot>=20.7
+
+# NSE Data Source
+nsepy>=0.8

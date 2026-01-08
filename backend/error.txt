@@ -1,0 +1,77 @@
+﻿python : Traceback (most 
+recent call last):
+At line:1 char:1
++ python run_backtest.py 
+2>&1 | Out-File -FilePath 
+error.txt -Encoding  ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo           
+   : NotSpecified: (Traceba  
+  ck (most recent call las   
+ t)::String) [], RemoteEx    
+ception
+    + FullyQualifiedErrorId  
+   : NativeCommandError
+ 
+  File "D:\Appforme\TradeEdge
+Pro\backend\run_backtest.py",
+ line 8, in <module>
+    from app.engine.backtest 
+import backtest_portfolio
+  File "D:\Appforme\TradeEdge
+Pro\backend\app\engine\backte
+st.py", line 11, in <module>
+    from app.strategies.base 
+import Signal, BaseStrategy
+  File "D:\Appforme\TradeEdge
+Pro\backend\app\strategies\ba
+se.py", line 16, in <module>
+    settings = get_settings()
+               ^^^^^^^^^^^^^^
+  File "D:\Appforme\TradeEdge
+Pro\backend\app\config.py", 
+line 47, in get_settings
+    return Settings()
+           ^^^^^^^^^^
+  File "C:\Users\JYOTHI\AppDa
+ta\Local\Programs\Python\Pyth
+on312\Lib\site-packages\pydan
+tic_settings\main.py", line 
+194, in __init__
+    super().__init__(
+  File "C:\Users\JYOTHI\AppDa
+ta\Local\Programs\Python\Pyth
+on312\Lib\site-packages\pydan
+tic\main.py", line 250, in 
+__init__
+    validated_self = self.__p
+ydantic_validator__.validate_
+python(data, 
+self_instance=self)
+                     ^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^
+pydantic_core._pydantic_core.
+ValidationError: 2 
+validation errors for 
+Settings
+telegram_bot_token
+  Extra inputs are not 
+permitted 
+[type=extra_forbidden, input_
+value='8442860680:AAE7vvavdkE
+x5GkJjWtiHuoIcqt5lgmzn40', 
+input_type=str]
+    For further information 
+visit https://errors.pydantic
+.dev/2.12/v/extra_forbidden
+telegram_chat_id
+  Extra inputs are not 
+permitted 
+[type=extra_forbidden, 
+input_value='8170555798', 
+input_type=str]
+    For further information 
+visit https://errors.pydantic
+.dev/2.12/v/extra_forbidden
