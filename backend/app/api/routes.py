@@ -4,7 +4,8 @@ With score breakdown and risk snapshot
 """
 from typing import List, Optional, Dict, Any
 from fastapi import APIRouter, Query, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, field_validator, model_validator
+import re
 from datetime import datetime
 
 from app.engine.signal_generator import generate_signals, get_cached_data, load_stock_universe, get_cached_regime
@@ -59,10 +60,16 @@ class SignalResponse(BaseModel):
 
 
 class PositionSizeRequest(BaseModel):
-    capital: float = 100000
-    risk_percent: float = 1.0
-    entry: float
-    stop_loss: float
+    capital: float = Field(100000, gt=0, le=100000000, description="Total capital")
+    risk_percent: float = Field(1.0, gt=0, le=10, description="Risk per trade %")
+    entry: float = Field(..., gt=0, le=1000000, description="Entry price")
+    stop_loss: float = Field(..., gt=0, le=1000000, description="Stop loss price")
+    
+    @model_validator(mode='after')
+    def validate_sl_not_equal_entry(self):
+        if self.entry == self.stop_loss:
+            raise ValueError('Stop loss cannot equal entry price')
+        return self
 
 
 class PositionSizeResponse(BaseModel):
@@ -620,26 +627,44 @@ async def run_backtest_endpoint(request: BacktestRequest):
 # ===== Portfolio Tracker Endpoints =====
 
 class TradeRequest(BaseModel):
-    symbol: str
-    entryDate: str
-    entryPrice: float
-    quantity: int
-    stopLoss: float
-    target: float
+    symbol: str = Field(..., min_length=2, max_length=20, description="Stock symbol")
+    entryDate: str = Field(..., pattern=r"^\d{4}-\d{2}-\d{2}$", description="YYYY-MM-DD")
+    entryPrice: float = Field(..., gt=0, le=1000000, description="Entry price")
+    quantity: int = Field(..., ge=1, le=1000000, description="Number of shares")
+    stopLoss: float = Field(..., gt=0, le=1000000, description="Stop loss price")
+    target: float = Field(..., gt=0, le=1000000, description="Target price")
     signalId: Optional[str] = ""
     notes: Optional[str] = ""
+    
+    @field_validator('symbol')
+    @classmethod
+    def validate_symbol_format(cls, v: str) -> str:
+        """Ensure symbol is uppercase and alphanumeric"""
+        v = v.upper().strip()
+        if not re.match(r'^[A-Z0-9&-]+$', v):
+            raise ValueError('Symbol must contain only letters, numbers, & or -')
+        return v
+    
+    @model_validator(mode='after')
+    def validate_trade_logic(self):
+        """Validate SL < entry < target for long trades"""
+        if self.stopLoss >= self.entryPrice:
+            raise ValueError('Stop loss must be below entry price for long trades')
+        if self.target <= self.entryPrice:
+            raise ValueError('Target must be above entry price for long trades')
+        return self
 
 
 class TradeUpdateRequest(BaseModel):
-    stopLoss: Optional[float] = None
-    target: Optional[float] = None
-    quantity: Optional[int] = None
+    stopLoss: Optional[float] = Field(None, gt=0, le=1000000)
+    target: Optional[float] = Field(None, gt=0, le=1000000)
+    quantity: Optional[int] = Field(None, ge=1, le=1000000)
     notes: Optional[str] = None
 
 
 class CloseTradeRequest(BaseModel):
-    exitPrice: float
-    exitDate: Optional[str] = None
+    exitPrice: float = Field(..., gt=0, le=1000000, description="Exit price")
+    exitDate: Optional[str] = Field(None, pattern=r"^\d{4}-\d{2}-\d{2}$")
 
 
 @router.post("/trades")

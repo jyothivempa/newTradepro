@@ -24,3 +24,6 @@ python-telegram-bot>=20.7
 
 # NSE Data Source
 nsepy>=0.8
+
+# WebSocket
+python-socketio>=5.10.0

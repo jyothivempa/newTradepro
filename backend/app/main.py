@@ -11,6 +11,8 @@ from app.utils.logger import get_logger
 from app.engine.signal_generator import load_stock_universe
 from app.scheduler import start_scheduler, stop_scheduler
 from app.utils.notifications import bot_service
+from app.realtime.websocket_manager import create_socket_app, get_connection_stats
+from app.realtime.price_aggregator import start_price_aggregator, stop_price_aggregator
 
 logger = get_logger(__name__)
 settings = get_settings()
@@ -33,9 +35,14 @@ async def lifespan(app: FastAPI):
     # Start Telegram Bot
     await bot_service.start()
     
+    # Start WebSocket Price Aggregator
+    await start_price_aggregator()
+    logger.info("WebSocket price aggregator started")
+    
     yield
     
     # Shutdown
+    await stop_price_aggregator()
     stop_scheduler()
     await bot_service.stop()
     logger.info("Shutting down TradeEdge Pro")
@@ -108,6 +115,24 @@ async def health_check():
     return {"status": "ok", "version": settings.app_version}
 
 
+@app.get("/ws/status")
+async def websocket_status():
+    """Get WebSocket connection statistics"""
+    from app.realtime.price_aggregator import price_aggregator
+    
+    return {
+        "connections": get_connection_stats(),
+        "aggregator": price_aggregator.get_status(),
+    }
+
+
+# Create Socket.IO wrapped ASGI app
+# This is the main application to run with uvicorn
+socket_app = create_socket_app(app)
+
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    # Run the socket_app to enable WebSocket support
+    uvicorn.run("app.main:socket_app", host="0.0.0.0", port=8000, reload=True)
+

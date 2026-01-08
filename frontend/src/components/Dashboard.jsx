@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSignals, useSectors, useHealth } from '../hooks/useSignals';
+import { useWebSocket, ConnectionStatus } from '../hooks/useWebSocket';
 import SignalCard from './SignalCard';
 import StockChart from './StockChart';
 import RiskCalculator from './RiskCalculator';
@@ -19,8 +20,25 @@ export default function Dashboard() {
     const [allStocks, setAllStocks] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [riskSnapshot, setRiskSnapshot] = useState(null);
-    const [tickerPrices, setTickerPrices] = useState([]);
     const searchRef = useRef(null);
+
+    // WebSocket for real-time ticker prices
+    const { prices: wsPrices, connected, reconnecting } = useWebSocket(TICKER_STOCKS);
+
+    // Convert WebSocket prices to ticker format
+    const tickerPrices = useMemo(() => {
+        return TICKER_STOCKS.map(symbol => {
+            const wsData = wsPrices[symbol];
+            if (wsData) {
+                return {
+                    symbol,
+                    ltp: wsData.ltp || 0,
+                    changePct: wsData.changePct || 0,
+                };
+            }
+            return { symbol, ltp: 0, changePct: 0 };
+        }).filter(s => s.ltp > 0);
+    }, [wsPrices]);
 
     const { signals, loading, error, lastUpdated, refetch } = useSignals(
         activeTab === 'intraday' ? 'intraday_bias' : 'swing',
@@ -54,21 +72,6 @@ export default function Dashboard() {
             }
         };
         fetchRiskSnapshot();
-    }, []);
-
-    // Fetch live ticker prices
-    useEffect(() => {
-        const fetchTickerPrices = async () => {
-            try {
-                const response = await signalApi.getLivePrices(TICKER_STOCKS.join(','));
-                setTickerPrices(response.data || []);
-            } catch (err) {
-                console.error('Failed to fetch ticker:', err);
-            }
-        };
-        fetchTickerPrices();
-        const interval = setInterval(fetchTickerPrices, 60000); // Refresh every minute
-        return () => clearInterval(interval);
     }, []);
 
     // Close suggestions on outside click
@@ -183,21 +186,32 @@ export default function Dashboard() {
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
             {/* Live Price Ticker */}
-            {tickerPrices.length > 0 && (
-                <div className="bg-gray-900 dark:bg-gray-950 text-white py-1.5 overflow-hidden">
-                    <div className="animate-marquee flex gap-8 whitespace-nowrap px-4">
-                        {tickerPrices.concat(tickerPrices).map((stock, i) => (
-                            <span key={i} className="inline-flex items-center gap-1 text-sm">
-                                <span className="font-medium">{stock.symbol}</span>
-                                <span className="text-gray-400">₹{stock.ltp}</span>
-                                <span className={stock.changePct >= 0 ? 'text-green-400' : 'text-red-400'}>
-                                    {stock.changePct >= 0 ? '▲' : '▼'} {Math.abs(stock.changePct).toFixed(1)}%
-                                </span>
-                            </span>
-                        ))}
+            <div className="bg-gray-900 dark:bg-gray-950 text-white py-1.5 overflow-hidden">
+                <div className="flex items-center">
+                    <div className="px-3 flex items-center gap-2 border-r border-gray-700">
+                        <ConnectionStatus connected={connected} reconnecting={reconnecting} />
+                    </div>
+                    <div className="flex-1 overflow-hidden">
+                        {tickerPrices.length > 0 ? (
+                            <div className="animate-marquee flex gap-8 whitespace-nowrap px-4">
+                                {tickerPrices.concat(tickerPrices).map((stock, i) => (
+                                    <span key={i} className="inline-flex items-center gap-1 text-sm">
+                                        <span className="font-medium">{stock.symbol}</span>
+                                        <span className="text-gray-400">₹{stock.ltp}</span>
+                                        <span className={stock.changePct >= 0 ? 'text-green-400' : 'text-red-400'}>
+                                            {stock.changePct >= 0 ? '▲' : '▼'} {Math.abs(stock.changePct).toFixed(1)}%
+                                        </span>
+                                    </span>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="text-gray-500 text-sm px-4">
+                                {connected ? 'Waiting for prices...' : 'Connecting...'}
+                            </div>
+                        )}
                     </div>
                 </div>
-            )}
+            </div>
 
             {/* Header */}
             <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
