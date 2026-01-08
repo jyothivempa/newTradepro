@@ -1,0 +1,491 @@
+2026-01-08 09:21:14 | WARNING  | app.data.fetch_data:<module>:27 - nsepy not installed. NSE fallback unavailable. Install with: pip install nsepy
+2026-01-08 09:21:18 | WARNING  | app.data.cache_manager:__init__:45 - Redis connection failed: Error 10061 connecting to localhost:6379. No connection could be made because the target machine actively refused it., using CSV fallback
+2026-01-08 09:21:19 | INFO     | app.engine.signal_generator:load_stock_universe:46 - Loaded 101 stocks from nifty100.json
+2026-01-08 09:21:19 | INFO     | app.engine.market_regime:get_regime_for_nifty:229 - NIFTY Regime: RANGING (ADX: 13.2, Change: 0.00%)
+2026-01-08 09:21:19 | INFO     | app.engine.signal_generator:generate_signals:306 - 🔒 Locked Regime: RANGING (ADX: 13.2)
+2026-01-08 09:21:19 | INFO     | app.engine.signal_generator:generate_signals:319 - ⚡ Scanning 101 stocks with 1 workers...
+2026-01-08 09:21:19 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ADANIENT:2026-01-08
+2026-01-08 09:21:22 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:21:22 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ADANIENT from Yahoo (1239 bars)
+2026-01-08 09:21:22 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ADANIENT:2026-01-08
+2026-01-08 09:21:22 | DEBUG    | app.strategies.swing:analyze:97 - ADANIENT: No clear trend (ADX: 17.2)
+2026-01-08 09:21:22 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ADANIPORTS:2026-01-08
+2026-01-08 09:21:23 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:21:23 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ADANIPORTS from Yahoo (1239 bars)
+2026-01-08 09:21:23 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ADANIPORTS:2026-01-08
+2026-01-08 09:21:23 | DEBUG    | app.strategies.swing:analyze:97 - ADANIPORTS: No clear trend (ADX: 14.7)
+2026-01-08 09:21:23 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ASIANPAINT:2026-01-08
+2026-01-08 09:21:25 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:21:25 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ASIANPAINT from Yahoo (1239 bars)
+2026-01-08 09:21:25 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ASIANPAINT:2026-01-08
+2026-01-08 09:21:25 | DEBUG    | app.strategies.swing:analyze:97 - ASIANPAINT: No clear trend (ADX: 17.0)
+2026-01-08 09:21:25 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:AXISBANK:2026-01-08
+2026-01-08 09:21:26 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:21:26 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched AXISBANK from Yahoo (1239 bars)
+2026-01-08 09:21:26 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:AXISBANK:2026-01-08
+2026-01-08 09:21:26 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:BAJFINANCE:2026-01-08
+2026-01-08 09:21:28 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:21:28 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched BAJFINANCE from Yahoo (1239 bars)
+2026-01-08 09:21:28 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:BAJFINANCE:2026-01-08
+2026-01-08 09:21:28 | DEBUG    | app.strategies.swing:analyze:97 - BAJFINANCE: No clear trend (ADX: 16.2)
+2026-01-08 09:21:28 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:BHARTIARTL:2026-01-08
+2026-01-08 09:21:29 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:21:29 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched BHARTIARTL from Yahoo (1239 bars)
+2026-01-08 09:21:29 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:BHARTIARTL:2026-01-08
+2026-01-08 09:21:29 | DEBUG    | app.strategies.swing:analyze:97 - BHARTIARTL: No clear trend (ADX: 9.7)
+2026-01-08 09:21:29 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:COALINDIA:2026-01-08
+2026-01-08 09:21:31 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:21:31 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched COALINDIA from Yahoo (1239 bars)
+2026-01-08 09:21:31 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:COALINDIA:2026-01-08
+2026-01-08 09:21:31 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:HCLTECH:2026-01-08
+2026-01-08 09:21:33 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:21:33 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched HCLTECH from Yahoo (1239 bars)
+2026-01-08 09:21:33 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:HCLTECH:2026-01-08
+2026-01-08 09:21:33 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:HDFCBANK:2026-01-08
+2026-01-08 09:21:34 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:21:34 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched HDFCBANK from Yahoo (1239 bars)
+2026-01-08 09:21:34 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:HDFCBANK:2026-01-08
+2026-01-08 09:21:34 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:HINDUNILVR:2026-01-08
+2026-01-08 09:21:36 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:21:36 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched HINDUNILVR from Yahoo (1239 bars)
+2026-01-08 09:21:36 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:HINDUNILVR:2026-01-08
+2026-01-08 09:21:36 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ICICIBANK:2026-01-08
+2026-01-08 09:21:38 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:21:38 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ICICIBANK from Yahoo (1239 bars)
+2026-01-08 09:21:38 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ICICIBANK:2026-01-08
+2026-01-08 09:21:38 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ITC:2026-01-08
+2026-01-08 09:21:40 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:21:40 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ITC from Yahoo (1239 bars)
+2026-01-08 09:21:40 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ITC:2026-01-08
+2026-01-08 09:21:40 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:INFY:2026-01-08
+2026-01-08 09:21:41 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:21:41 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched INFY from Yahoo (1239 bars)
+2026-01-08 09:21:41 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:INFY:2026-01-08
+2026-01-08 09:21:41 | INFO     | app.strategies.swing:analyze:274 - INFY: BUY via Pullback to 20EMA (Low confidence, R:R 2.0)
+2026-01-08 09:21:41 | DEBUG    | app.engine.scorer:score_signal:354 - INFY: Score = 60 (deductions: -50, bonuses: 10)
+2026-01-08 09:21:41 | DEBUG    | app.data.archive:archive_signal:125 - Archived signal: INFY (swing) - REJECTED
+2026-01-08 09:21:41 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:JSWSTEEL:2026-01-08
+2026-01-08 09:21:43 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:21:43 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched JSWSTEEL from Yahoo (1239 bars)
+2026-01-08 09:21:43 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:JSWSTEEL:2026-01-08
+2026-01-08 09:21:43 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:KOTAKBANK:2026-01-08
+2026-01-08 09:21:45 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:21:45 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched KOTAKBANK from Yahoo (1239 bars)
+2026-01-08 09:21:45 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:KOTAKBANK:2026-01-08
+2026-01-08 09:21:45 | DEBUG    | app.strategies.swing:analyze:97 - KOTAKBANK: No clear trend (ADX: 15.7)
+2026-01-08 09:21:45 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:LT:2026-01-08
+2026-01-08 09:21:47 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:21:47 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched LT from Yahoo (1239 bars)
+2026-01-08 09:21:47 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:LT:2026-01-08
+2026-01-08 09:21:47 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:M&M:2026-01-08
+2026-01-08 09:21:48 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:21:48 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched M&M from Yahoo (1239 bars)
+2026-01-08 09:21:48 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:M&M:2026-01-08
+2026-01-08 09:21:48 | DEBUG    | app.strategies.swing:analyze:97 - M&M: No clear trend (ADX: 15.7)
+2026-01-08 09:21:48 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:MARUTI:2026-01-08
+2026-01-08 09:21:50 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:21:50 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched MARUTI from Yahoo (1239 bars)
+2026-01-08 09:21:50 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:MARUTI:2026-01-08
+2026-01-08 09:21:50 | INFO     | app.strategies.swing:analyze:274 - MARUTI: BUY via Pullback to 20EMA (Low confidence, R:R 2.0)
+2026-01-08 09:21:50 | DEBUG    | app.engine.scorer:score_signal:354 - MARUTI: Score = 55 (deductions: -55, bonuses: 10)
+2026-01-08 09:21:50 | DEBUG    | app.data.archive:archive_signal:125 - Archived signal: MARUTI (swing) - REJECTED
+2026-01-08 09:21:50 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:NTPC:2026-01-08
+2026-01-08 09:21:52 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:21:52 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched NTPC from Yahoo (1239 bars)
+2026-01-08 09:21:52 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:NTPC:2026-01-08
+2026-01-08 09:21:52 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ONGC:2026-01-08
+2026-01-08 09:21:53 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:21:53 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ONGC from Yahoo (1239 bars)
+2026-01-08 09:21:53 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ONGC:2026-01-08
+2026-01-08 09:21:53 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:POWERGRID:2026-01-08
+2026-01-08 09:21:55 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:21:55 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched POWERGRID from Yahoo (1239 bars)
+2026-01-08 09:21:55 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:POWERGRID:2026-01-08
+2026-01-08 09:21:55 | DEBUG    | app.strategies.swing:analyze:97 - POWERGRID: No clear trend (ADX: 18.9)
+2026-01-08 09:21:55 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:RELIANCE:2026-01-08
+2026-01-08 09:21:57 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:21:57 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched RELIANCE from Yahoo (1239 bars)
+2026-01-08 09:21:57 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:RELIANCE:2026-01-08
+2026-01-08 09:21:57 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:SBIN:2026-01-08
+2026-01-08 09:21:59 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:21:59 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched SBIN from Yahoo (1239 bars)
+2026-01-08 09:21:59 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:SBIN:2026-01-08
+2026-01-08 09:21:59 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:SUNPHARMA:2026-01-08
+2026-01-08 09:22:00 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:00 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched SUNPHARMA from Yahoo (1239 bars)
+2026-01-08 09:22:00 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:SUNPHARMA:2026-01-08
+2026-01-08 09:22:00 | INFO     | app.strategies.swing:analyze:274 - SUNPHARMA: BUY via Pullback to 20EMA (Low confidence, R:R 2.0)
+2026-01-08 09:22:00 | DEBUG    | app.engine.scorer:score_signal:354 - SUNPHARMA: Score = 50 (deductions: -55, bonuses: 5)
+2026-01-08 09:22:00 | DEBUG    | app.data.archive:archive_signal:125 - Archived signal: SUNPHARMA (swing) - REJECTED
+2026-01-08 09:22:00 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:TCS:2026-01-08
+2026-01-08 09:22:01 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:01 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched TCS from Yahoo (1239 bars)
+2026-01-08 09:22:01 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:TCS:2026-01-08
+2026-01-08 09:22:01 | INFO     | app.strategies.swing:analyze:274 - TCS: BUY via Pullback to 20EMA (Low confidence, R:R 2.0)
+2026-01-08 09:22:01 | DEBUG    | app.engine.scorer:score_signal:354 - TCS: Score = 55 (deductions: -55, bonuses: 10)
+2026-01-08 09:22:01 | DEBUG    | app.data.archive:archive_signal:125 - Archived signal: TCS (swing) - REJECTED
+2026-01-08 09:22:01 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:TATASTEEL:2026-01-08
+2026-01-08 09:22:02 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:02 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched TATASTEEL from Yahoo (1239 bars)
+2026-01-08 09:22:02 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:TATASTEEL:2026-01-08
+2026-01-08 09:22:02 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:TITAN:2026-01-08
+2026-01-08 09:22:04 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:04 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched TITAN from Yahoo (1239 bars)
+2026-01-08 09:22:04 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:TITAN:2026-01-08
+2026-01-08 09:22:04 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ULTRACEMCO:2026-01-08
+2026-01-08 09:22:06 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:06 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ULTRACEMCO from Yahoo (1239 bars)
+2026-01-08 09:22:06 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ULTRACEMCO:2026-01-08
+2026-01-08 09:22:06 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:WIPRO:2026-01-08
+2026-01-08 09:22:08 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:08 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched WIPRO from Yahoo (1239 bars)
+2026-01-08 09:22:09 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:WIPRO:2026-01-08
+2026-01-08 09:22:09 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:360ONE:2026-01-08
+2026-01-08 09:22:10 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:10 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched 360ONE from Yahoo (1237 bars)
+2026-01-08 09:22:10 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:360ONE:2026-01-08
+2026-01-08 09:22:10 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:3MINDIA:2026-01-08
+2026-01-08 09:22:12 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:12 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched 3MINDIA from Yahoo (1238 bars)
+2026-01-08 09:22:12 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:3MINDIA:2026-01-08
+2026-01-08 09:22:12 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing 3MINDIA (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 09:22:12 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:AADHARHFC:2026-01-08
+2026-01-08 09:22:15 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:15 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched AADHARHFC from Yahoo (413 bars)
+2026-01-08 09:22:15 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:AADHARHFC:2026-01-08
+2026-01-08 09:22:15 | INFO     | app.strategies.swing:analyze:274 - AADHARHFC: SELL via Pullback to 20EMA (Low confidence, R:R 2.0)
+2026-01-08 09:22:15 | DEBUG    | app.engine.scorer:score_signal:354 - AADHARHFC: Score = 40 (deductions: -70, bonuses: 10)
+2026-01-08 09:22:15 | DEBUG    | app.data.archive:archive_signal:125 - Archived signal: AADHARHFC (swing) - REJECTED
+2026-01-08 09:22:15 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:AARTIIND:2026-01-08
+2026-01-08 09:22:17 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:17 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched AARTIIND from Yahoo (1239 bars)
+2026-01-08 09:22:17 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:AARTIIND:2026-01-08
+2026-01-08 09:22:17 | DEBUG    | app.strategies.swing:analyze:97 - AARTIIND: No clear trend (ADX: 16.3)
+2026-01-08 09:22:17 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:AAVAS:2026-01-08
+2026-01-08 09:22:18 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:18 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched AAVAS from Yahoo (1238 bars)
+2026-01-08 09:22:18 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:AAVAS:2026-01-08
+2026-01-08 09:22:18 | INFO     | app.strategies.swing:analyze:274 - AAVAS: SELL via Pullback to 20EMA (Low confidence, R:R 2.0)
+2026-01-08 09:22:18 | DEBUG    | app.engine.scorer:score_signal:354 - AAVAS: Score = 35 (deductions: -70, bonuses: 5)
+2026-01-08 09:22:18 | DEBUG    | app.data.archive:archive_signal:125 - Archived signal: AAVAS (swing) - REJECTED
+2026-01-08 09:22:18 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ABB:2026-01-08
+2026-01-08 09:22:19 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:19 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ABB from Yahoo (1238 bars)
+2026-01-08 09:22:19 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ABB:2026-01-08
+2026-01-08 09:22:19 | DEBUG    | app.strategies.swing:analyze:97 - ABB: No clear trend (ADX: 11.7)
+2026-01-08 09:22:19 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ABBOTINDIA:2026-01-08
+2026-01-08 09:22:21 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:21 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ABBOTINDIA from Yahoo (1238 bars)
+2026-01-08 09:22:21 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ABBOTINDIA:2026-01-08
+2026-01-08 09:22:21 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ABBOTINDIA (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 09:22:21 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ABCAPITAL:2026-01-08
+2026-01-08 09:22:22 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:22 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ABCAPITAL from Yahoo (1239 bars)
+2026-01-08 09:22:22 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ABCAPITAL:2026-01-08
+2026-01-08 09:22:22 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ABFRL:2026-01-08
+2026-01-08 09:22:24 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:24 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ABFRL from Yahoo (1239 bars)
+2026-01-08 09:22:24 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ABFRL:2026-01-08
+2026-01-08 09:22:24 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ABLBL:2026-01-08
+2026-01-08 09:22:25 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:25 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ABLBL from Yahoo (137 bars)
+2026-01-08 09:22:25 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ABLBL:2026-01-08
+2026-01-08 09:22:25 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ABREL:2026-01-08
+2026-01-08 09:22:27 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:27 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ABREL from Yahoo (1239 bars)
+2026-01-08 09:22:27 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ABREL:2026-01-08
+2026-01-08 09:22:27 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ABREL (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 09:22:27 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ABSLAMC:2026-01-08
+2026-01-08 09:22:28 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:28 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ABSLAMC from Yahoo (1053 bars)
+2026-01-08 09:22:28 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ABSLAMC:2026-01-08
+2026-01-08 09:22:28 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ACC:2026-01-08
+2026-01-08 09:22:30 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:30 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ACC from Yahoo (1239 bars)
+2026-01-08 09:22:30 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ACC:2026-01-08
+2026-01-08 09:22:30 | DEBUG    | app.strategies.swing:analyze:97 - ACC: No clear trend (ADX: 11.7)
+2026-01-08 09:22:30 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ACE:2026-01-08
+2026-01-08 09:22:32 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:32 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ACE from Yahoo (1239 bars)
+2026-01-08 09:22:32 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ACE:2026-01-08
+2026-01-08 09:22:32 | DEBUG    | app.strategies.swing:analyze:97 - ACE: No clear trend (ADX: 14.9)
+2026-01-08 09:22:32 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ACMESOLAR:2026-01-08
+2026-01-08 09:22:33 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:33 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ACMESOLAR from Yahoo (288 bars)
+2026-01-08 09:22:33 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ACMESOLAR:2026-01-08
+2026-01-08 09:22:33 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ADANIENSOL:2026-01-08
+2026-01-08 09:22:34 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:34 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ADANIENSOL from Yahoo (589 bars)
+2026-01-08 09:22:34 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ADANIENSOL:2026-01-08
+2026-01-08 09:22:34 | INFO     | app.strategies.swing:analyze:274 - ADANIENSOL: BUY via Pullback to 20EMA (Low confidence, R:R 2.0)
+2026-01-08 09:22:34 | DEBUG    | app.engine.scorer:score_signal:354 - ADANIENSOL: Score = 50 (deductions: -55, bonuses: 5)
+2026-01-08 09:22:34 | DEBUG    | app.data.archive:archive_signal:125 - Archived signal: ADANIENSOL (swing) - REJECTED
+2026-01-08 09:22:34 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ADANIGREEN:2026-01-08
+2026-01-08 09:22:36 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:36 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ADANIGREEN from Yahoo (1239 bars)
+2026-01-08 09:22:36 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ADANIGREEN:2026-01-08
+2026-01-08 09:22:36 | DEBUG    | app.strategies.swing:analyze:97 - ADANIGREEN: No clear trend (ADX: 9.2)
+2026-01-08 09:22:36 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ADANIPOWER:2026-01-08
+2026-01-08 09:22:37 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:37 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ADANIPOWER from Yahoo (1239 bars)
+2026-01-08 09:22:37 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ADANIPOWER:2026-01-08
+2026-01-08 09:22:37 | INFO     | app.strategies.swing:analyze:274 - ADANIPOWER: SELL via Pullback to 20EMA (Low confidence, R:R 2.0)
+2026-01-08 09:22:37 | DEBUG    | app.engine.scorer:score_signal:354 - ADANIPOWER: Score = 40 (deductions: -70, bonuses: 10)
+2026-01-08 09:22:37 | DEBUG    | app.data.archive:archive_signal:125 - Archived signal: ADANIPOWER (swing) - REJECTED
+2026-01-08 09:22:37 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:AEGISLOG:2026-01-08
+2026-01-08 09:22:38 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:38 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched AEGISLOG from Yahoo (399 bars)
+2026-01-08 09:22:38 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:AEGISLOG:2026-01-08
+2026-01-08 09:22:38 | INFO     | app.strategies.swing:analyze:274 - AEGISLOG: SELL via Pullback to 20EMA (Low confidence, R:R 2.0)
+2026-01-08 09:22:38 | DEBUG    | app.engine.scorer:score_signal:354 - AEGISLOG: Score = 40 (deductions: -70, bonuses: 10)
+2026-01-08 09:22:38 | DEBUG    | app.data.archive:archive_signal:125 - Archived signal: AEGISLOG (swing) - REJECTED
+2026-01-08 09:22:38 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:AEGISVOPAK:2026-01-08
+2026-01-08 09:22:40 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:40 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched AEGISVOPAK from Yahoo (154 bars)
+2026-01-08 09:22:40 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:AEGISVOPAK:2026-01-08
+2026-01-08 09:22:40 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:AFCONS:2026-01-08
+2026-01-08 09:22:43 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:43 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched AFCONS from Yahoo (296 bars)
+2026-01-08 09:22:43 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:AFCONS:2026-01-08
+2026-01-08 09:22:43 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:AFFLE:2026-01-08
+2026-01-08 09:22:43 | INFO     | app.engine.signal_generator:generate_signals:353 - 📊 Progress: 50/101 (84.1s)
+2026-01-08 09:22:45 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:45 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched AFFLE from Yahoo (1238 bars)
+2026-01-08 09:22:45 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:AFFLE:2026-01-08
+2026-01-08 09:22:45 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:AGARWALEYE:2026-01-08
+2026-01-08 09:22:48 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:48 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched AGARWALEYE from Yahoo (231 bars)
+2026-01-08 09:22:48 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:AGARWALEYE:2026-01-08
+2026-01-08 09:22:48 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:AIAENG:2026-01-08
+2026-01-08 09:22:51 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:51 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched AIAENG from Yahoo (1238 bars)
+2026-01-08 09:22:51 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:AIAENG:2026-01-08
+2026-01-08 09:22:51 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing AIAENG (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 09:22:51 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:AIIL:2026-01-08
+2026-01-08 09:22:52 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:52 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched AIIL from Yahoo (424 bars)
+2026-01-08 09:22:52 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:AIIL:2026-01-08
+2026-01-08 09:22:52 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:AJANTPHARM:2026-01-08
+2026-01-08 09:22:55 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:55 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched AJANTPHARM from Yahoo (1237 bars)
+2026-01-08 09:22:55 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:AJANTPHARM:2026-01-08
+2026-01-08 09:22:55 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:AKUMS:2026-01-08
+2026-01-08 09:22:58 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:22:58 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched AKUMS from Yahoo (352 bars)
+2026-01-08 09:22:58 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:AKUMS:2026-01-08
+2026-01-08 09:22:58 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:AKZOINDIA:2026-01-08
+2026-01-08 09:23:00 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:00 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched AKZOINDIA from Yahoo (1238 bars)
+2026-01-08 09:23:00 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:AKZOINDIA:2026-01-08
+2026-01-08 09:23:00 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ALKEM:2026-01-08
+2026-01-08 09:23:02 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:02 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ALKEM from Yahoo (1239 bars)
+2026-01-08 09:23:02 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ALKEM:2026-01-08
+2026-01-08 09:23:02 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ALKEM (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 09:23:02 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ALKYLAMINE:2026-01-08
+2026-01-08 09:23:04 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:04 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ALKYLAMINE from Yahoo (1237 bars)
+2026-01-08 09:23:04 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ALKYLAMINE:2026-01-08
+2026-01-08 09:23:04 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ALKYLAMINE (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 09:23:04 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ALOKINDS:2026-01-08
+2026-01-08 09:23:06 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:06 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ALOKINDS from Yahoo (1239 bars)
+2026-01-08 09:23:06 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ALOKINDS:2026-01-08
+2026-01-08 09:23:06 | DEBUG    | app.strategies.swing:analyze:97 - ALOKINDS: No clear trend (ADX: 15.1)
+2026-01-08 09:23:06 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:AMBER:2026-01-08
+2026-01-08 09:23:08 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:08 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched AMBER from Yahoo (1239 bars)
+2026-01-08 09:23:08 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:AMBER:2026-01-08
+2026-01-08 09:23:08 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:AMBUJACEM:2026-01-08
+2026-01-08 09:23:11 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:11 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched AMBUJACEM from Yahoo (1239 bars)
+2026-01-08 09:23:11 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:AMBUJACEM:2026-01-08
+2026-01-08 09:23:11 | INFO     | app.strategies.swing:analyze:274 - AMBUJACEM: BUY via Pullback to 20EMA (Low confidence, R:R 2.0)
+2026-01-08 09:23:11 | DEBUG    | app.engine.scorer:score_signal:354 - AMBUJACEM: Score = 60 (deductions: -50, bonuses: 10)
+2026-01-08 09:23:11 | DEBUG    | app.data.archive:archive_signal:125 - Archived signal: AMBUJACEM (swing) - REJECTED
+2026-01-08 09:23:11 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ANANDRATHI:2026-01-08
+2026-01-08 09:23:14 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:14 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ANANDRATHI from Yahoo (1010 bars)
+2026-01-08 09:23:14 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ANANDRATHI:2026-01-08
+2026-01-08 09:23:14 | DEBUG    | app.strategies.swing:analyze:97 - ANANDRATHI: No clear trend (ADX: 18.4)
+2026-01-08 09:23:14 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ANANTRAJ:2026-01-08
+2026-01-08 09:23:17 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:17 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ANANTRAJ from Yahoo (1239 bars)
+2026-01-08 09:23:17 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ANANTRAJ:2026-01-08
+2026-01-08 09:23:17 | DEBUG    | app.strategies.swing:analyze:97 - ANANTRAJ: No clear trend (ADX: 17.8)
+2026-01-08 09:23:17 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ANGELONE:2026-01-08
+2026-01-08 09:23:19 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:19 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ANGELONE from Yahoo (1239 bars)
+2026-01-08 09:23:19 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ANGELONE:2026-01-08
+2026-01-08 09:23:19 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:APARINDS:2026-01-08
+2026-01-08 09:23:21 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:21 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched APARINDS from Yahoo (1239 bars)
+2026-01-08 09:23:21 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:APARINDS:2026-01-08
+2026-01-08 09:23:21 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing APARINDS (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 09:23:21 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:APLAPOLLO:2026-01-08
+2026-01-08 09:23:22 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:22 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched APLAPOLLO from Yahoo (1238 bars)
+2026-01-08 09:23:22 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:APLAPOLLO:2026-01-08
+2026-01-08 09:23:22 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:APLLTD:2026-01-08
+2026-01-08 09:23:25 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:25 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched APLLTD from Yahoo (1238 bars)
+2026-01-08 09:23:25 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:APLLTD:2026-01-08
+2026-01-08 09:23:25 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing APLLTD (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 09:23:25 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:APOLLOHOSP:2026-01-08
+2026-01-08 09:23:27 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:27 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched APOLLOHOSP from Yahoo (1239 bars)
+2026-01-08 09:23:27 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:APOLLOHOSP:2026-01-08
+2026-01-08 09:23:27 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:APOLLOTYRE:2026-01-08
+2026-01-08 09:23:30 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:30 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched APOLLOTYRE from Yahoo (1239 bars)
+2026-01-08 09:23:30 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:APOLLOTYRE:2026-01-08
+2026-01-08 09:23:30 | DEBUG    | app.strategies.swing:analyze:97 - APOLLOTYRE: No clear trend (ADX: 13.9)
+2026-01-08 09:23:30 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:APTUS:2026-01-08
+2026-01-08 09:23:32 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:32 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched APTUS from Yahoo (1086 bars)
+2026-01-08 09:23:32 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:APTUS:2026-01-08
+2026-01-08 09:23:32 | DEBUG    | app.strategies.swing:analyze:97 - APTUS: No clear trend (ADX: 11.2)
+2026-01-08 09:23:32 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ARE&M:2026-01-08
+2026-01-08 09:23:33 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:33 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ARE&M from Yahoo (546 bars)
+2026-01-08 09:23:33 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ARE&M:2026-01-08
+2026-01-08 09:23:33 | INFO     | app.strategies.swing:analyze:274 - ARE&M: SELL via Pullback to 20EMA (Low confidence, R:R 2.0)
+2026-01-08 09:23:33 | DEBUG    | app.engine.scorer:score_signal:354 - ARE&M: Score = 55 (deductions: -55, bonuses: 10)
+2026-01-08 09:23:33 | DEBUG    | app.data.archive:archive_signal:125 - Archived signal: ARE&M (swing) - REJECTED
+2026-01-08 09:23:33 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ASAHIINDIA:2026-01-08
+2026-01-08 09:23:35 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:35 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ASAHIINDIA from Yahoo (1238 bars)
+2026-01-08 09:23:35 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ASAHIINDIA:2026-01-08
+2026-01-08 09:23:35 | DEBUG    | app.strategies.swing:analyze:97 - ASAHIINDIA: No clear trend (ADX: 19.3)
+2026-01-08 09:23:35 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ASHOKLEY:2026-01-08
+2026-01-08 09:23:36 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:36 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ASHOKLEY from Yahoo (1239 bars)
+2026-01-08 09:23:36 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ASHOKLEY:2026-01-08
+2026-01-08 09:23:36 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ASTERDM:2026-01-08
+2026-01-08 09:23:38 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:38 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ASTERDM from Yahoo (1238 bars)
+2026-01-08 09:23:38 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ASTERDM:2026-01-08
+2026-01-08 09:23:38 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ASTRAL:2026-01-08
+2026-01-08 09:23:40 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:40 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ASTRAL from Yahoo (1239 bars)
+2026-01-08 09:23:40 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ASTRAL:2026-01-08
+2026-01-08 09:23:40 | DEBUG    | app.strategies.swing:analyze:97 - ASTRAL: No clear trend (ADX: 18.0)
+2026-01-08 09:23:40 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ASTRAZEN:2026-01-08
+2026-01-08 09:23:42 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:42 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ASTRAZEN from Yahoo (1237 bars)
+2026-01-08 09:23:42 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ASTRAZEN:2026-01-08
+2026-01-08 09:23:42 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ASTRAZEN (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 09:23:42 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ATGL:2026-01-08
+2026-01-08 09:23:43 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:43 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ATGL from Yahoo (1239 bars)
+2026-01-08 09:23:43 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ATGL:2026-01-08
+2026-01-08 09:23:43 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ATHERENERG:2026-01-08
+2026-01-08 09:23:45 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:45 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ATHERENERG from Yahoo (174 bars)
+2026-01-08 09:23:45 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ATHERENERG:2026-01-08
+2026-01-08 09:23:45 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:ATUL:2026-01-08
+2026-01-08 09:23:47 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:47 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched ATUL from Yahoo (1239 bars)
+2026-01-08 09:23:47 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:ATUL:2026-01-08
+2026-01-08 09:23:47 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ATUL (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 09:23:47 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:AUBANK:2026-01-08
+2026-01-08 09:23:48 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:48 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched AUBANK from Yahoo (1238 bars)
+2026-01-08 09:23:48 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:AUBANK:2026-01-08
+2026-01-08 09:23:48 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:AUROPHARMA:2026-01-08
+2026-01-08 09:23:49 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:49 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched AUROPHARMA from Yahoo (1238 bars)
+2026-01-08 09:23:49 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:AUROPHARMA:2026-01-08
+2026-01-08 09:23:49 | DEBUG    | app.strategies.swing:analyze:97 - AUROPHARMA: No clear trend (ADX: 14.7)
+2026-01-08 09:23:49 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:AWL:2026-01-08
+2026-01-08 09:23:51 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:51 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched AWL from Yahoo (970 bars)
+2026-01-08 09:23:51 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:AWL:2026-01-08
+2026-01-08 09:23:51 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:BAJAJ-AUTO:2026-01-08
+2026-01-08 09:23:53 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:53 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched BAJAJ-AUTO from Yahoo (1239 bars)
+2026-01-08 09:23:53 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:BAJAJ-AUTO:2026-01-08
+2026-01-08 09:23:53 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:BAJAJFINSV:2026-01-08
+2026-01-08 09:23:54 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:54 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched BAJAJFINSV from Yahoo (1239 bars)
+2026-01-08 09:23:54 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:BAJAJFINSV:2026-01-08
+2026-01-08 09:23:54 | DEBUG    | app.strategies.swing:analyze:97 - BAJAJFINSV: No clear trend (ADX: 11.2)
+2026-01-08 09:23:54 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:BAJAJHFL:2026-01-08
+2026-01-08 09:23:56 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:56 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched BAJAJHFL from Yahoo (330 bars)
+2026-01-08 09:23:56 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:BAJAJHFL:2026-01-08
+2026-01-08 09:23:56 | WARNING  | app.strategies.indicators:get_weekly_trend:385 - Weekly trend calculation failed: '<' not supported between instances of 'float' and 'NoneType'
+2026-01-08 09:23:56 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:BAJAJHLDNG:2026-01-08
+2026-01-08 09:23:58 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:58 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched BAJAJHLDNG from Yahoo (1238 bars)
+2026-01-08 09:23:58 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:BAJAJHLDNG:2026-01-08
+2026-01-08 09:23:58 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BAJAJHLDNG (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 09:23:58 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:BALKRISIND:2026-01-08
+2026-01-08 09:23:58 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:23:58 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched BALKRISIND from Yahoo (1239 bars)
+2026-01-08 09:23:59 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:BALKRISIND:2026-01-08
+2026-01-08 09:23:59 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BALKRISIND (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 09:23:59 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:BALRAMCHIN:2026-01-08
+2026-01-08 09:24:00 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:24:00 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched BALRAMCHIN from Yahoo (1238 bars)
+2026-01-08 09:24:01 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:BALRAMCHIN:2026-01-08
+2026-01-08 09:24:01 | DEBUG    | app.strategies.swing:analyze:97 - BALRAMCHIN: No clear trend (ADX: 10.3)
+2026-01-08 09:24:01 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:BANDHANBNK:2026-01-08
+2026-01-08 09:24:02 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:24:02 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched BANDHANBNK from Yahoo (1239 bars)
+2026-01-08 09:24:02 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:BANDHANBNK:2026-01-08
+2026-01-08 09:24:02 | DEBUG    | app.strategies.swing:analyze:97 - BANDHANBNK: No clear trend (ADX: 17.8)
+2026-01-08 09:24:02 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:BANKBARODA:2026-01-08
+2026-01-08 09:24:03 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:24:03 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched BANKBARODA from Yahoo (1239 bars)
+2026-01-08 09:24:03 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:BANKBARODA:2026-01-08
+2026-01-08 09:24:03 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:BANKINDIA:2026-01-08
+2026-01-08 09:24:04 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:24:04 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched BANKINDIA from Yahoo (1239 bars)
+2026-01-08 09:24:04 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:BANKINDIA:2026-01-08
+2026-01-08 09:24:04 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:BASF:2026-01-08
+2026-01-08 09:24:05 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:24:05 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched BASF from Yahoo (1238 bars)
+2026-01-08 09:24:05 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:BASF:2026-01-08
+2026-01-08 09:24:05 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BASF (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 09:24:05 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:BATAINDIA:2026-01-08
+2026-01-08 09:24:06 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:24:06 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched BATAINDIA from Yahoo (1239 bars)
+2026-01-08 09:24:06 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:BATAINDIA:2026-01-08
+2026-01-08 09:24:06 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BATAINDIA (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 09:24:06 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:BAYERCROP:2026-01-08
+2026-01-08 09:24:07 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:24:07 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched BAYERCROP from Yahoo (1238 bars)
+2026-01-08 09:24:07 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:BAYERCROP:2026-01-08
+2026-01-08 09:24:07 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BAYERCROP (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 09:24:07 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:BBTC:2026-01-08
+2026-01-08 09:24:08 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:24:08 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched BBTC from Yahoo (1238 bars)
+2026-01-08 09:24:09 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:BBTC:2026-01-08
+2026-01-08 09:24:09 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BBTC (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 09:24:09 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:BDL:2026-01-08
+2026-01-08 09:24:10 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:24:10 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched BDL from Yahoo (1239 bars)
+2026-01-08 09:24:10 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:BDL:2026-01-08
+2026-01-08 09:24:10 | DEBUG    | app.strategies.swing:analyze:97 - BDL: No clear trend (ADX: 16.6)
+2026-01-08 09:24:10 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:BEL:2026-01-08
+2026-01-08 09:24:12 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:24:12 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched BEL from Yahoo (1239 bars)
+2026-01-08 09:24:13 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:BEL:2026-01-08
+2026-01-08 09:24:13 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:BEML:2026-01-08
+2026-01-08 09:24:13 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:24:13 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched BEML from Yahoo (1239 bars)
+2026-01-08 09:24:14 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:BEML:2026-01-08
+2026-01-08 09:24:14 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:BERGEPAINT:2026-01-08
+2026-01-08 09:24:15 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:24:15 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched BERGEPAINT from Yahoo (1238 bars)
+2026-01-08 09:24:15 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:BERGEPAINT:2026-01-08
+2026-01-08 09:24:15 | DEBUG    | app.strategies.swing:analyze:97 - BERGEPAINT: No clear trend (ADX: 19.6)
+2026-01-08 09:24:15 | DEBUG    | app.data.cache_manager:get:89 - Cache miss: daily:JIOFIN:2026-01-08
+2026-01-08 09:24:15 | INFO     | app.engine.signal_generator:generate_signals:353 - 📊 Progress: 100/101 (176.6s)
+2026-01-08 09:24:16 | DEBUG    | app.data.data_source_monitor:record_success:96 - Data source 'yahoo' success recorded
+2026-01-08 09:24:16 | INFO     | app.data.fetch_data:fetch_daily_data:204 - Fetched JIOFIN from Yahoo (586 bars)
+2026-01-08 09:24:16 | DEBUG    | app.data.cache_manager:set:118 - Cached to CSV: daily:JIOFIN:2026-01-08
+2026-01-08 09:24:16 | DEBUG    | app.strategies.swing:analyze:97 - JIOFIN: No clear trend (ADX: 11.9)
+2026-01-08 09:24:16 | INFO     | app.engine.signal_generator:generate_signals:374 - 🛡️ Validating 0 candidates against Risk Rules...
+2026-01-08 09:24:16 | INFO     | app.engine.signal_generator:generate_signals:507 - 🏁 Generated 0 swing signals in 177.4s (Regime: RANGING)

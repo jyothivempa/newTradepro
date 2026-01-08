@@ -85,6 +85,7 @@ def archive_signal(
     rejection_reason: str = "",
     nifty_trend: str = "neutral",
     metadata: Optional[Dict] = None,
+    timestamp: Optional[str] = None,
 ) -> int:
     """
     Archive a signal (accepted or rejected).
@@ -116,7 +117,7 @@ def archive_signal(
             rejection_reason,
             nifty_trend,
             json.dumps(metadata) if metadata else None,
-            datetime.now().isoformat(),
+            timestamp or datetime.now().isoformat(),
         ))
         conn.commit()
         signal_id = cursor.lastrowid

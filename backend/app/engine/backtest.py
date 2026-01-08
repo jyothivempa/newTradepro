@@ -152,13 +152,14 @@ class Backtester:
         self.capital = initial_capital
     
     def apply_slippage(self, price: float, is_buy: bool, atr_pct: float = 1.0) -> float:
-        """Apply dynamic slippage based on volatility"""
-        # Base slippage 0.05%
-        # If volatile (ATR > 2%), double slippage
-        slippage_pct = self.costs.slippage_base
-        if atr_pct > 2.0:
-            slippage_pct *= 2.0
-            
+        """
+        Apply dynamic slippage based on volatility.
+        
+        Rule: max(0.1%, ATR * 0.1)
+        """
+        # Critical Fix 2: Stricter slippage
+        slippage_pct = max(0.1, atr_pct * 0.1)
+        
         slippage_mult = 1 + (slippage_pct / 100)
         
         # Buy higher, Sell lower
@@ -224,9 +225,11 @@ class Backtester:
                 high = current_bar['High']
                 low = current_bar['Low']
                 close = current_bar['Close']
+                open_price = current_bar['Open']
                 
                 # Get ATR for dynamic slippage
-                atr_pct = (current_bar['ATR'] / close * 100) if 'ATR' in current_bar else 1.0
+                atr = current_bar.get('ATR', open_price * 0.02)
+                atr_pct = (atr / close * 100)
                 
                 exit_price = 0.0
                 exit_reason = ""
@@ -235,10 +238,18 @@ class Backtester:
                 bars_held = current_idx - open_trade.entry_index
                 
                 if open_trade.signal_type == "BUY":
-                    # GAP HANDLING: Check if opened below stop loss
-                    if self.GAP_SL_HANDLING and current_bar['Open'] < open_trade.stop_loss:
+                    # Critical Fix 2: Enhanced Gap Logic
+                    # If gap > 1xATR against position -> stop at open
+                    gap_down = (open_trade.entry_price - open_price)
+                    if gap_down > atr:
+                         # Huge gap down, exit at Open
+                        exit_price = self.apply_slippage(open_price, False, atr_pct)
+                        exit_reason = "gap_stoploss_atr"
+                    
+                    # Normal Gap Check (Open < SL)
+                    elif self.GAP_SL_HANDLING and open_price < open_trade.stop_loss:
                         # Gap down through SL - exit at open (worse than expected)
-                        exit_price = self.apply_slippage(current_bar['Open'], False, atr_pct)
+                        exit_price = self.apply_slippage(open_price, False, atr_pct)
                         exit_reason = "gap_stoploss"
                     
                     # Check stop loss hit (worst case first)

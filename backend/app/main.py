@@ -73,6 +73,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# V2.0: Version Header Middleware
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.requests import Request
+from app.core.versioning import get_system_version_header
+
+class VersionHeaderMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+        response.headers["X-System-Versions"] = get_system_version_header()
+        return response
+
+app.add_middleware(VersionHeaderMiddleware)
+
 # Include routes
 app.include_router(router)
 
@@ -84,9 +97,15 @@ async def root():
         "name": settings.app_name,
         "version": settings.app_version,
         "docs": "/docs",
-        "health": "/api/health",
+        "health": "/health",
         "disclaimer": "For educational purposes only - not investment advice",
     }
+
+@app.get("/health")
+@app.get("/ready")
+async def health_check():
+    """Health check endpoint for k8s/monitoring"""
+    return {"status": "ok", "version": settings.app_version}
 
 
 if __name__ == "__main__":

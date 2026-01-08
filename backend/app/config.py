@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     # App Info
     app_name: str = "TradeEdge Pro"
     app_version: str = "1.0.0"
+    environment: Literal["production", "development"] = "development"
     debug: bool = False
     
     # Stock Universe

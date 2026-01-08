@@ -1,32 +1,79 @@
 """
-TradeEdge Pro - Intraday Bias Strategy
-15m EOD Simulation - NOT live intraday trading
+TradeEdge Pro - Intraday Bias Engine
+Directional bias for next session - NOT a trading strategy.
+
+⚠️ IMPORTANT: This is a DIRECTIONAL BIAS indicator only.
+- Does NOT provide entry/exit prices
+- Does NOT attach P&L expectations
+- Valid for: next session open directional bias
 """
-from typing import Optional
+from dataclasses import dataclass
+from typing import Optional, List
 import pandas as pd
 import pandas_ta as ta
 
-from app.strategies.base import BaseStrategy, Signal
+from app.strategies.base import BaseStrategy
 from app.utils.logger import get_logger
 
 logger = get_logger(__name__)
 
 
-class IntradayBiasStrategy(BaseStrategy):
+@dataclass
+class IntradayBias:
     """
-    - Volume Confirmation > 1.2x 20-bar avg
+    Directional bias output (NOT a trading signal).
+    
+    This indicates likely direction for next session,
+    but should NOT be used for P&L calculations.
+    """
+    symbol: str
+    bias: str               # "BULLISH", "BEARISH", "NEUTRAL"
+    confidence: float       # 0.0 to 1.0
+    valid_for: str          # e.g., "next_session_open"
+    reasoning: List[str]    # Why this bias was determined
+    atr_pct: float          # Volatility context
+    volume_ratio: float     # Volume context
+    
+    def to_dict(self) -> dict:
+        return {
+            "symbol": self.symbol,
+            "bias": self.bias,
+            "confidence": round(self.confidence, 2),
+            "validFor": self.valid_for,
+            "reasoning": self.reasoning,
+            "atrPct": round(self.atr_pct, 2),
+            "volumeRatio": round(self.volume_ratio, 2),
+            # Explicit disclaimers
+            "disclaimer": "Directional bias only. Not a trading signal.",
+            "noPnlExpectation": True,
+        }
+
+
+class IntradayBiasEngine(BaseStrategy):
+    """
+    Intraday Bias Engine - Directional indicator only.
+    
+    ⚠️ This does NOT simulate intraday trading.
+    ⚠️ Output is bias/confidence, NOT entry/exit prices.
+    ⚠️ No P&L should be attached to this output.
+    
+    Purpose: Provide directional lean for next session using EOD data.
     """
     
-    name = "intraday_bias"
+    name = "intraday_bias_engine"
     
     def add_vwap(self, df: pd.DataFrame) -> pd.DataFrame:
         """Add VWAP indicator"""
         df['VWAP'] = ta.vwap(df['High'], df['Low'], df['Close'], df['Volume'])
         return df
     
-    def analyze(self, df: pd.DataFrame, symbol: str, sector: str = "") -> Optional[Signal]:
-        """Analyze 15m data for intraday bias signal"""
+    def analyze(self, df: pd.DataFrame, symbol: str, sector: str = "") -> Optional[IntradayBias]:
+        """
+        Analyze data for directional bias.
         
+        Returns:
+            IntradayBias with direction and confidence (NOT entry/exit)
+        """
         # Validate data
         if not self.validate_data(df):
             return None
@@ -43,93 +90,98 @@ class IntradayBiasStrategy(BaseStrategy):
         latest = df.iloc[-1]
         prev = df.iloc[-2]
         
-        # Import sector benchmarks for dynamic ATR caps
+        # Get volatility context
         from app.data.sector_benchmarks import get_sector_atr_cap, get_sector_atr_min
         
         atr_pct = latest.get('ATR_PCT', 0)
         atr_min = get_sector_atr_min(sector)
         atr_max = get_sector_atr_cap(sector)
         
-        # Filter 1: Volatility check (sector-specific)
-        if atr_pct < atr_min:
-            logger.debug(f"{symbol}: Volatility too low ({atr_pct:.2f}% < {atr_min}% for {sector or 'DEFAULT'})")
-            return None
-        if atr_pct > atr_max:
-            logger.debug(f"{symbol}: Volatility too high ({atr_pct:.2f}% > {atr_max}% for {sector or 'DEFAULT'})")
+        # Filter: Skip if volatility out of range
+        if atr_pct < atr_min or atr_pct > atr_max:
             return None
         
-        # Filter 2: Volume confirmation (> 1.2x average)
         volume_ratio = latest.get('Volume_Ratio', 0)
-        if volume_ratio < 1.2:
-            logger.debug(f"{symbol}: Volume too low ({volume_ratio:.2f}x)")
-            return None
         
-        # Detect EMA crossover
-        ema9_cross_up = prev['EMA9'] <= prev['EMA21'] and latest['EMA9'] > latest['EMA21']
-        ema9_cross_down = prev['EMA9'] >= prev['EMA21'] and latest['EMA9'] < latest['EMA21']
+        # === BIAS CALCULATION ===
+        reasoning = []
+        bullish_score = 0
+        bearish_score = 0
         
-        # VWAP bias
+        # 1. EMA Crossover
+        ema9_above = latest['EMA9'] > latest['EMA21']
+        ema9_cross_up = prev['EMA9'] <= prev['EMA21'] and ema9_above
+        ema9_cross_down = prev['EMA9'] >= prev['EMA21'] and not ema9_above
+        
+        if ema9_cross_up:
+            bullish_score += 2
+            reasoning.append("EMA9 crossed above EMA21")
+        elif ema9_above:
+            bullish_score += 1
+            reasoning.append("EMA9 > EMA21")
+        elif ema9_cross_down:
+            bearish_score += 2
+            reasoning.append("EMA9 crossed below EMA21")
+        else:
+            bearish_score += 1
+            reasoning.append("EMA9 < EMA21")
+        
+        # 2. VWAP Position
         price = latest['Close']
         vwap = latest.get('VWAP', price)
-        above_vwap = price > vwap
-        below_vwap = price < vwap
         
-        signal_type = None
+        if price > vwap * 1.005:  # Above VWAP by 0.5%
+            bullish_score += 1
+            reasoning.append("Price above VWAP")
+        elif price < vwap * 0.995:  # Below VWAP by 0.5%
+            bearish_score += 1
+            reasoning.append("Price below VWAP")
         
-        # BUY Signal: EMA9 crosses above EMA21 + Price > VWAP
-        if ema9_cross_up and above_vwap:
-            signal_type = "BUY"
+        # 3. RSI Momentum
+        rsi = latest.get('RSI', 50)
+        if rsi > 55:
+            bullish_score += 1
+            reasoning.append(f"RSI bullish ({rsi:.0f})")
+        elif rsi < 45:
+            bearish_score += 1
+            reasoning.append(f"RSI bearish ({rsi:.0f})")
         
-        # SELL Signal: EMA9 crosses below EMA21 + Price < VWAP
-        elif ema9_cross_down and below_vwap:
-            signal_type = "SELL"
+        # 4. Volume Confirmation
+        if volume_ratio > 1.3:
+            # Volume amplifies the bias
+            if bullish_score > bearish_score:
+                bullish_score += 1
+                reasoning.append(f"Volume confirms ({volume_ratio:.1f}x)")
+            elif bearish_score > bullish_score:
+                bearish_score += 1
+                reasoning.append(f"Volume confirms ({volume_ratio:.1f}x)")
         
-        if not signal_type:
-            return None
+        # === DETERMINE BIAS ===
+        total_score = bullish_score + bearish_score
         
-        # Calculate entry, SL, targets
-        atr = latest['ATR']
-        
-        if signal_type == "BUY":
-            entry_low = price
-            entry_high = price + (atr * 0.3)
-            stop_loss = price - (atr * 1.5)
-            target1 = price + (atr * 2)
-            target2 = price + (atr * 3)
-        else:  # SELL
-            entry_low = price - (atr * 0.3)
-            entry_high = price
-            stop_loss = price + (atr * 1.5)
-            target1 = price - (atr * 2)
-            target2 = price - (atr * 3)
-        
-        # Calculate R:R
-        risk_reward = self.calculate_risk_reward(price, stop_loss, target1)
-        
-        # Get trend strength
-        trend_strength = self.get_trend_strength(df)
-        
-        # EMA alignment description
-        if latest['EMA9'] > latest['EMA21']:
-            ema_alignment = "9EMA > 21EMA (Bullish)"
+        if bullish_score > bearish_score + 1:
+            bias = "BULLISH"
+            confidence = min(0.95, 0.5 + (bullish_score - bearish_score) * 0.1)
+        elif bearish_score > bullish_score + 1:
+            bias = "BEARISH"
+            confidence = min(0.95, 0.5 + (bearish_score - bullish_score) * 0.1)
         else:
-            ema_alignment = "9EMA < 21EMA (Bearish)"
+            bias = "NEUTRAL"
+            confidence = 0.4  # Low confidence when unclear
+            reasoning.append("Mixed signals")
         
-        signal = Signal(
+        logger.info(f"{symbol}: Bias {bias} (confidence: {confidence:.0%})")
+        
+        return IntradayBias(
             symbol=symbol,
-            signal_type=signal_type,
-            strategy=self.name,
-            entry_low=round(entry_low, 2),
-            entry_high=round(entry_high, 2),
-            stop_loss=round(stop_loss, 2),
-            targets=[round(target1, 2), round(target2, 2)],
-            trend_strength=trend_strength,
-            risk_reward=risk_reward,
-            ema_alignment=ema_alignment,
-            rsi_value=latest.get('RSI', 50),
-            adx_value=latest.get('ADX', 0),
+            bias=bias,
+            confidence=confidence,
+            valid_for="next_session_open",
+            reasoning=reasoning,
+            atr_pct=atr_pct,
             volume_ratio=volume_ratio,
         )
-        
-        logger.info(f"{symbol}: {signal_type} signal generated (R:R {risk_reward:.1f})")
-        return signal
+
+
+# Keep old class name for backwards compatibility
+IntradayBiasStrategy = IntradayBiasEngine

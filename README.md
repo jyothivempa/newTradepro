@@ -10,8 +10,8 @@ Professional trading signal system for Indian markets (NSE) with AI-powered swin
 
 ### Core
 - **Swing Trading** - Daily breakout/pullback signals with multi-timeframe analysis
-- **Intraday Bias** - 15m EOD simulation with VWAP and EMA crossovers
-- **Risk Management** - Position sizing, R:R gating, sector concentration limits
+- **Intraday Bias Engine** - Directional bias only (Bullish/Bearish/Neutral) for next session. *No trade signals.*
+- **Portfolio Controls** - Daily limit (-2R), regime transition exits, correlation gating
 - **Market Regime** - TRENDING/RANGING/VOLATILE/DEAD classification with 0-1 confidence
 
 ### V1 Enhancements
@@ -41,6 +41,16 @@ Professional trading signal system for Indian markets (NSE) with AI-powered swin
 | **STT Simulation** | 0.1% delivery tax deduction in results |
 | **Auto-Failover Alerts** | Telegram notification on source degradation |
 | **NSE Calendar** | Holiday detection for graceful scan skip |
+| **Backtest Realism** | Slippage (ATR based) + Gap handling |
+
+### V2.0 Enterprise Hardening
+| Feature | Description |
+|---------|-------------|
+| **Audit Trail** | Append-only JSONL logging for every decision |
+| **Deterministic** | Strict version registry (Engine v1.2, Risk v1.2) |
+| **Risk Governors** | Weekly Loss (-6R) + Sector Cap (30%) Override |
+| **Infrastructure** | Nginx (Rate Limits) + Gunicorn + Health Checks |
+| **Compliance** | `X-System-Versions` header in all responses |
 
 ---
 

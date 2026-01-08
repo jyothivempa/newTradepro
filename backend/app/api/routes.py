@@ -146,14 +146,29 @@ async def health_check():
     )
 
 
-@router.get("/intraday-bias", response_model=List[SignalResponse])
+class IntradayBiasResponse(BaseModel):
+    """V1.3: Bias Engine Response (No P&L)"""
+    symbol: str
+    bias: str
+    confidence: float
+    validFor: str
+    reasoning: List[str]
+    atrPct: float
+    volumeRatio: float
+    disclaimer: str
+    sector: Optional[str] = None
+
+
+@router.get("/intraday-bias", response_model=List[IntradayBiasResponse])
 async def get_intraday_bias_signals(
     limit: int = Query(10, ge=1, le=50),
     sector: Optional[str] = Query(None),
 ):
     """
-    Get intraday bias signals with score breakdown.
-    Uses NIFTY trend for market regime filter.
+    Get intraday bias signals.
+    
+    ⚠️ V1.3: Returns directional bias only, NO entry/exit prices.
+    Designed for directional verification, not trading.
     """
     logger.info(f"Fetching intraday-bias signals (limit={limit})")
     
@@ -163,24 +178,31 @@ async def get_intraday_bias_signals(
         max_signals=limit,
     )
     
-    # Filter by sector
+    # Filter by sector if requested
     if sector:
-        results = [r for r in results if r.get("sector", "").lower() == sector.lower()]
-    
-    # Convert to response
-    responses = []
+        results = [r for r in results if r.get("sector") == sector]
+        
+    response = []
     for r in results:
         signal = r["signal"]
-        breakdown = r.get("breakdown")
         
-        resp = SignalResponse(
-            **signal.to_dict(),
-            scoreBreakdown=ScoreBreakdownResponse(**breakdown.to_dict()) if breakdown else None,
-            sector=r.get("sector"),
-        )
-        responses.append(resp)
+        # Ensure we have an IntradayBias object (not standard Signal)
+        if hasattr(signal, "bias"):
+            response.append({
+                "symbol": signal.symbol,
+                "bias": signal.bias,
+                "confidence": signal.confidence,
+                "validFor": signal.valid_for,
+                "reasoning": signal.reasoning,
+                "atrPct": signal.atr_pct,
+                "volumeRatio": signal.volume_ratio,
+                "disclaimer": "Directional bias only. Not a trading signal.",
+                "sector": r.get("sector")
+            })
+            
+    return response[:limit]
     
-    return responses
+
 
 
 @router.get("/swing", response_model=List[SignalResponse])
@@ -717,4 +739,109 @@ async def get_portfolio_stats_endpoint():
     return get_portfolio_stats()
 
 
+# ===== Audit & Compliance Endpoints (V2.0) =====
+
+@router.get("/audit/verify")
+async def verify_audit_trail(
+    date: str = Query(..., description="Date to verify (YYYY-MM-DD)")
+):
+    """
+    Verify hash chain integrity for a specific date's audit log.
+    
+    Returns:
+        - isValid: bool - Whether the chain is intact
+        - errors: list - Any integrity violations found
+    """
+    from datetime import datetime as dt
+    from pathlib import Path
+    from app.core.audit import verify_audit_chain, AuditLogger
+    
+    try:
+        target_date = dt.strptime(date, "%Y-%m-%d").date()
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid date format. Use YYYY-MM-DD")
+    
+    logger_instance = AuditLogger()
+    log_file = logger_instance._get_log_file(target_date)
+    
+    is_valid, errors = verify_audit_chain(log_file)
+    
+    return {
+        "date": date,
+        "logFile": str(log_file),
+        "fileExists": log_file.exists(),
+        "isValid": is_valid,
+        "errors": errors[:10],  # Limit to first 10 errors
+        "errorCount": len(errors),
+    }
+
+
+@router.get("/audit/compliance-report")
+async def get_compliance_report_endpoint(
+    start_date: str = Query(..., description="Start date (YYYY-MM-DD)"),
+    end_date: str = Query(..., description="End date (YYYY-MM-DD)")
+):
+    """
+    Generate compliance report for a date range.
+    
+    Returns summary statistics and chain verification status for each day.
+    Required for SEBI regulatory submissions.
+    """
+    from datetime import datetime as dt
+    from app.core.audit import get_compliance_report
+    
+    try:
+        start = dt.strptime(start_date, "%Y-%m-%d").date()
+        end = dt.strptime(end_date, "%Y-%m-%d").date()
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid date format. Use YYYY-MM-DD")
+    
+    if end < start:
+        raise HTTPException(status_code=400, detail="end_date must be >= start_date")
+    
+    if (end - start).days > 365:
+        raise HTTPException(status_code=400, detail="Date range cannot exceed 365 days")
+    
+    return get_compliance_report(start, end)
+
+
+@router.get("/audit/portfolio-risk-status")
+async def get_portfolio_risk_status():
+    """
+    Get current portfolio risk manager status.
+    
+    Includes:
+    - Kill switch states (daily/weekly/circuit breaker)
+    - Consecutive losses
+    - Sector concentration
+    - Current regime multiplier
+    """
+    from app.engine.portfolio_risk import portfolio_risk
+    
+    return portfolio_risk.get_status()
+
+
+@router.post("/audit/reset-circuit-breaker")
+async def reset_circuit_breaker():
+    """
+    Manually reset the circuit breaker after review.
+    
+    ⚠️ Use with caution - this re-enables trading after 3+ consecutive losses.
+    """
+    from app.engine.portfolio_risk import portfolio_risk
+    from app.core.audit import audit_logger
+    
+    # Log the manual reset for compliance
+    audit_logger.log_event("CIRCUIT_BREAKER_RESET", {
+        "previousConsecutiveLosses": portfolio_risk.state.consecutive_losses,
+        "resetBy": "API"
+    })
+    
+    portfolio_risk.reset_circuit_breaker()
+    
+    return {
+        "success": True,
+        "message": "Circuit breaker reset",
+        "status": portfolio_risk.get_status()
+    }
 
