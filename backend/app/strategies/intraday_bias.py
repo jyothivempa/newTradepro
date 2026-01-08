@@ -24,7 +24,7 @@ class IntradayBiasStrategy(BaseStrategy):
         df['VWAP'] = ta.vwap(df['High'], df['Low'], df['Close'], df['Volume'])
         return df
     
-    def analyze(self, df: pd.DataFrame, symbol: str) -> Optional[Signal]:
+    def analyze(self, df: pd.DataFrame, symbol: str, sector: str = "") -> Optional[Signal]:
         """Analyze 15m data for intraday bias signal"""
         
         # Validate data
@@ -43,13 +43,19 @@ class IntradayBiasStrategy(BaseStrategy):
         latest = df.iloc[-1]
         prev = df.iloc[-2]
         
-        # Filter 1: Volatility check (ATR between 0.25% and 2%)
+        # Import sector benchmarks for dynamic ATR caps
+        from app.data.sector_benchmarks import get_sector_atr_cap, get_sector_atr_min
+        
         atr_pct = latest.get('ATR_PCT', 0)
-        if atr_pct < 0.25:
-            logger.debug(f"{symbol}: Volatility too low ({atr_pct:.2f}%), market is DEAD")
+        atr_min = get_sector_atr_min(sector)
+        atr_max = get_sector_atr_cap(sector)
+        
+        # Filter 1: Volatility check (sector-specific)
+        if atr_pct < atr_min:
+            logger.debug(f"{symbol}: Volatility too low ({atr_pct:.2f}% < {atr_min}% for {sector or 'DEFAULT'})")
             return None
-        if atr_pct > 2.0:
-            logger.debug(f"{symbol}: Volatility too high ({atr_pct:.2f}%)")
+        if atr_pct > atr_max:
+            logger.debug(f"{symbol}: Volatility too high ({atr_pct:.2f}% > {atr_max}% for {sector or 'DEFAULT'})")
             return None
         
         # Filter 2: Volume confirmation (> 1.2x average)

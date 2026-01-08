@@ -3,7 +3,7 @@ TradeEdge Pro - Enhanced Signal Scorer
 Context-aware scoring with breakdown for explainability
 """
 from dataclasses import dataclass, field
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 import pandas as pd
 
 from app.strategies.base import Signal
@@ -21,6 +21,8 @@ class ScoreBreakdown:
     deductions: Dict[str, int] = field(default_factory=dict)
     bonuses: Dict[str, int] = field(default_factory=dict)
     final_score: int = 0
+    passed: List[str] = field(default_factory=list)  # Passing criteria
+    failed: List[str] = field(default_factory=list)  # Failed/weak criteria
     
     def to_dict(self) -> dict:
         return {
@@ -28,6 +30,8 @@ class ScoreBreakdown:
             "deductions": self.deductions,
             "bonuses": self.bonuses,
             "final": self.final_score,
+            "passed": self.passed,
+            "failed": self.failed,
         }
 
 
@@ -71,13 +75,29 @@ class SignalScorer:
         breakdown = ScoreBreakdown()
         extra = extra_context or {}
         
+        # === REGIME GATING (Critical V1 Fix) ===
+        # Block/penalize swing trades in sideways/dead markets
+        regime = self.market_regime.upper() if self.market_regime else "NEUTRAL"
+        
+        if regime in ("RANGING", "DEAD", "SIDEWAYS"):
+            if signal.strategy == "swing":
+                breakdown.deductions["Sideways Regime Penalty"] = -20
+                breakdown.failed.append("Market regime unfavorable for swing")
+        
+        # NIFTY below 50EMA check
+        if extra.get('nifty_below_50ema') and signal.signal_type == "BUY":
+            breakdown.deductions["Index Below 50EMA"] = -15
+            breakdown.failed.append("NIFTY below 50EMA")
+        
         # === DEDUCTIONS ===
         
         # 1. Market Against (Critical)
         if self.nifty_trend == "bearish" and signal.signal_type == "BUY":
             breakdown.deductions["Market Against Trend"] = -25
+            breakdown.failed.append("Trading against market trend")
         elif self.nifty_trend == "bullish" and signal.signal_type == "SELL":
             breakdown.deductions["Market Against Trend"] = -25
+            breakdown.failed.append("Trading against market trend")
         
         # 2. Weak Volume
         if signal.volume_ratio < 1.0:

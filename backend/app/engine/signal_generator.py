@@ -271,6 +271,37 @@ def analyze_stock_intraday(
     return None
 
 
+# === V1 FIX: Sector Deduplication ===
+MAX_SIGNALS_PER_SECTOR = 2
+
+
+def filter_by_percentile(results: list, percentile: float = 0.92) -> list:
+    """
+    Filter to top N% of signals by score.
+    
+    V1 Fix: Replaces static ≥70 threshold with adaptive percentile.
+    Takes top 8% (percentile=0.92) of signals.
+    
+    Args:
+        results: List of candidate dicts with 'signal' key
+        percentile: Percentile threshold (0.92 = top 8%)
+    
+    Returns:
+        Filtered list of top percentile signals
+    """
+    if not results or len(results) < 5:
+        return results  # Not enough signals for percentile filtering
+    
+    scores = sorted([r["signal"].score for r in results], reverse=True)
+    cutoff_idx = max(1, int(len(scores) * (1 - percentile)))
+    threshold = scores[cutoff_idx - 1]  # Score at percentile cutoff
+    
+    filtered = [r for r in results if r["signal"].score >= threshold]
+    logger.info(f"📊 Percentile filter: {len(results)} → {len(filtered)} signals (threshold: {threshold})")
+    
+    return filtered
+
+
 def generate_signals(
     strategy_type: str = "swing",
     market_regime: str = "neutral",
@@ -346,11 +377,16 @@ def generate_signals(
     # Sort by score descending
     results.sort(key=lambda r: r["signal"].score, reverse=True)
     
+    # === V1 FIX: Percentile Filter (Top 8%) ===
+    # Replaces static ≥70 threshold with adaptive percentile
+    results = filter_by_percentile(results, percentile=0.92)
+    
     # BATCH RISK VALIDATION (Sequential)
     # Allows tracking sector concentration across the batch
     rm = RiskManager()
     
     final_results = []
+    sector_count = {}  # V1 FIX: Track signals per sector
     
     logger.info(f"🛡️ Validating {len(results)} candidates against Risk Rules...")
     
@@ -363,6 +399,12 @@ def generate_signals(
         # Check limit
         if len(final_results) >= max_signals:
             break
+        
+        # === V1 FIX: Sector Deduplication ===
+        # Max 2 signals per sector per scan
+        if sector_count.get(sector, 0) >= MAX_SIGNALS_PER_SECTOR:
+            logger.debug(f"⚠️ Skipping {signal.symbol}: Max {MAX_SIGNALS_PER_SECTOR} signals for {sector}")
+            continue
             
         # Validate against CURRENT batch exposure
         is_valid, reason = rm.validate_signal(signal, sector)
@@ -377,6 +419,7 @@ def generate_signals(
             if ps.valid:
                 rm.add_trade(signal.symbol, sector, ps.position_value)
                 final_results.append(candidate)
+                sector_count[sector] = sector_count.get(sector, 0) + 1  # Track
                 
                 # HIGH-SCORE ALERT: Notify via Telegram for exceptional signals
                 if signal.score >= 85 and is_telegram_configured():
