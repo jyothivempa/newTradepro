@@ -354,6 +354,28 @@ async def get_nifty_trend_status():
     }
 
 
+@router.get("/nifty-regime-v2")
+async def get_nifty_regime_vector():
+    """
+    Get probabilistic regime analysis for NIFTY50 (V2.0).
+    
+    Returns probability distribution instead of single label:
+    - TRENDING, RANGING, VOLATILE, DEAD probabilities
+    - Dominant regime with confidence
+    - Supporting metrics: ADX, Choppiness, Hurst, ATR percentile
+    - Position multiplier (weighted by regime probabilities)
+    """
+    from app.engine.regime_engine import get_nifty_regime_v2
+    
+    regime = get_nifty_regime_v2()
+    
+    return {
+        **regime.to_dict(),
+        "positionMultiplier": regime.get_position_multiplier(),
+        "scoreAdjustment": regime.get_score_adjustment(),
+    }
+
+
 @router.get("/backtest/{symbol}")
 async def run_backtest(
     symbol: str,

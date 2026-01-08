@@ -77,28 +77,42 @@ for stock in stock_universe:
 
 ---
 
-### 2. Market Regime Classification (`market_regime.py`)
+### 2. Market Regime 2.0 (`regime_engine.py`) 🧠
+
+**Probabilistic Multi-Factor Classification:**
 
 ```
-ADX-Based Classification:
-┌─────────────────────────────────────────┐
-│  ADX > 25  &  DI+ dominates  → TRENDING │
-│  ADX > 25  &  ATR > 3%       → VOLATILE │
-│  ADX < 20  &  ATR < 1%       → DEAD     │
-│  Otherwise                   → RANGING  │
-└─────────────────────────────────────────┘
-
-Confidence Score:
-  confidence = min((ADX - 15) / 20, 1.0)
+Metrics Used:
+┌──────────────────────────────────────────────────────────────┐
+│  ADX            │ Trend strength (14-period)                 │
+│  Choppiness     │ <38 Trending, >61 Choppy                   │
+│  Hurst Exponent │ >0.5 Trend-persistent, <0.5 Mean-reverting │
+│  ATR Percentile │ Volatility rank vs 252-day history         │
+└──────────────────────────────────────────────────────────────┘
 ```
 
-**Regime Impact:**
-| Regime | Position Multiplier | Score Modifier |
-|--------|---------------------|----------------|
-| TRENDING | 1.0× | +10 bonus |
-| RANGING | 0.6× | -20 penalty |
-| VOLATILE | 0.5× | 0 |
-| DEAD | 0.0× | -30 penalty |
+**API Response (GET /api/nifty-regime-v2):**
+```json
+{
+  "probabilities": {
+    "TRENDING": 0.62,
+    "RANGING": 0.18,
+    "VOLATILE": 0.15,
+    "DEAD": 0.05
+  },
+  "dominant": "TRENDING",
+  "confidence": 0.62,
+  "positionMultiplier": 0.85,
+  "scoreAdjustment": 4
+}
+```
+
+**Weighted Position Sizing:**
+```python
+size = base_size * regime.get_position_multiplier()
+# Multiplier = Σ(probability × regime_weight)
+# TRENDING: 1.0, RANGING: 0.6, VOLATILE: 0.5, DEAD: 0.0
+```
 
 ---
 

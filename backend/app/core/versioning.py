@@ -11,6 +11,7 @@ SYSTEM_VERSIONS = {
     "scoring_model": "1.1.0",    # Scoring weights and logic
     "data_feed": "1.0.0",        # Data fetching and validation
     "audit_trail": "2.0.0",      # Audit logging with hash-chain
+    "regime_engine": "2.0.0",    # Probabilistic market regime
 }
 
 def get_system_version_header() -> str:
