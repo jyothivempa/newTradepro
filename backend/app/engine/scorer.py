@@ -89,6 +89,15 @@ class SignalScorer:
             breakdown.deductions["Index Below 50EMA"] = -15
             breakdown.failed.append("NIFTY below 50EMA")
         
+        # === V1.3: VIX GATING (Global Volatility) ===
+        vix = extra.get('vix', 20)
+        if vix > 35:
+            breakdown.deductions["Extreme VIX"] = -25
+            breakdown.failed.append(f"Extreme global volatility (VIX {vix:.0f})")
+        elif vix > 30:
+            breakdown.deductions["High VIX"] = -15
+            breakdown.failed.append(f"Elevated global volatility (VIX {vix:.0f})")
+        
         # === DEDUCTIONS ===
         
         # 1. Market Against (Critical)

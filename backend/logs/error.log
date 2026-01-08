@@ -5082,3 +5082,408 @@ Date                                  ...
 2026-01-07 17:17:49 | ERROR    | app.engine.signal_generator:analyze_stock_intraday:269 - Error analyzing CRISIL (intraday): cannot reindex on an axis with duplicate labels
 2026-01-07 17:17:49 | ERROR    | app.engine.signal_generator:analyze_stock_intraday:269 - Error analyzing CRAFTSMAN (intraday): cannot reindex on an axis with duplicate labels
 2026-01-07 17:17:50 | ERROR    | app.engine.signal_generator:analyze_stock_intraday:269 - Error analyzing ERIS (intraday): cannot reindex on an axis with duplicate labels
+2026-01-08 08:39:56 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing AIIL (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:39:56 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ANANDRATHI (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:39:56 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ANANTRAJ (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:39:57 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ASAHIINDIA (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:39:58 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ASTERDM (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:39:58 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ATHERENERG (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:39:58 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BAJAJ-AUTO (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:39:58 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing AUBANK (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:39:58 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BATAINDIA (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:39:58 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BALKRISIND (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:39:58 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BASF (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:39:58 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BALRAMCHIN (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:39:58 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BAJAJHFL (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:39:58 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing AWL (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:39:58 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BBTC (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:39:58 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BAJAJFINSV (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:00 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BPCL (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:00 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BSE (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:01 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing CEATLTD (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:01 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing CENTURYPLY (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:01 | ERROR    | app.data.fetch_data:fetch_daily_data:249 - All data sources failed for AUROPHARMA
+2026-01-08 08:40:02 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing CLEAN (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:02 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing CHOICEIN (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:03 | ERROR    | app.data.fetch_data:fetch_daily_data:249 - All data sources failed for BEML
+2026-01-08 08:40:03 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing CRISIL (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:04 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DATAPATTNS (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:04 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DBREALTY (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:04 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DIVISLAB (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:04 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DLF (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:04 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DEEPAKFERT (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:04 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DRREDDY (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:05 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ESCORTS (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:05 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DELHIVERY (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:05 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing EMCURE (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:06 | ERROR    | app.data.fetch_data:fetch_daily_data:249 - All data sources failed for FORTIS
+2026-01-08 08:40:07 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing GESHIP (swing): The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+2026-01-08 08:40:12 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing AIIL (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:12 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ANANDRATHI (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:12 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ANANTRAJ (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:12 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ASAHIINDIA (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:12 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ASTERDM (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:12 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ATHERENERG (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:12 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing AUBANK (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:12 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing AWL (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:12 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BAJAJ-AUTO (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:12 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BAJAJFINSV (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:12 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BAJAJHFL (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:12 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BALKRISIND (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:12 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BALRAMCHIN (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:12 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BASF (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:12 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BATAINDIA (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:12 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BBTC (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:13 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BPCL (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:13 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BSE (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:13 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing CEATLTD (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:13 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing CENTURYPLY (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:13 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing CHOICEIN (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:13 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing CLEAN (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:13 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing CRISIL (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:13 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DATAPATTNS (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:13 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DBREALTY (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:13 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DEEPAKFERT (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:13 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DELHIVERY (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:14 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DIVISLAB (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:14 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DLF (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:14 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DRREDDY (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:14 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing EMCURE (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:14 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ESCORTS (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:40:14 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing GESHIP (swing): The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for AJANTPHARM
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for AEGISLOG
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ACMESOLAR
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for AEGISVOPAK
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for AKUMS
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ADANIENSOL
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ANANDRATHI
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for AFCONS
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ANGELONE
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for APARINDS
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for APLAPOLLO
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for APLLTD
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for APOLLOHOSP
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for APOLLOTYRE
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for APTUS
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ARE&M
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ASAHIINDIA
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ASHOKLEY
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ASTERDM
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ASTRAZEN
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ASTRAL
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ATGL
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ATHERENERG
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ATUL
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for AUBANK
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for AUROPHARMA
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for AWL
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BAJAJFINSV
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BAJAJ-AUTO
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BAJAJHFL
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BAJAJHLDNG
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BALKRISIND
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BALRAMCHIN
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BANDHANBNK
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BANKBARODA
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BANKINDIA
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BASF
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BATAINDIA
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BAYERCROP
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BBTC
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BDL
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BEL
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BEML
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BERGEPAINT
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BHARATFORG
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BHARTIHEXA
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BHEL
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BIKAJI
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BIOCON
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BLS
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BLUEDART
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BLUEJET
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BLUESTARCO
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BOSCHLTD
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BPCL
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BRIGADE
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BRITANNIA
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BSE
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BSOFT
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CAMPUS
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CAMS
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CANBK
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CANFINHOME
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CAPLIPOINT
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CARBORUNIV
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CASTROLIND
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CCL
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CDSL
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CEATLTD
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CENTRALBK
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CENTURYPLY
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CERA
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CESC
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CGCL
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CGPOWER
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CHALET
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CHAMBLFERT
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CHENNPETRO
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CHOICEIN
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CHOLAFIN
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CHOLAHLDNG
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CIPLA
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CLEAN
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for COCHINSHIP
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for COFORGE
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for COHANCE
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for COLPAL
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CONCOR
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CONCORDBIO
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for COROMANDEL
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CRAFTSMAN
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CREDITACC
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CRISIL
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CROMPTON
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CUB
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CUMMINSIND
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CYIENT
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DABUR
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DALBHARAT
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DATAPATTNS
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DBREALTY
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DCMSHRIRAM
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DEEPAKFERT
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DEEPAKNTR
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DELHIVERY
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DEVYANI
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DIVISLAB
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DIXON
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DLF
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DMART
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DOMS
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DRREDDY
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DUMMYHDLVR
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ECLERX
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for EICHERMOT
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for EIDPARRY
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for EIHOTEL
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ELECON
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ELGIEQUIP
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for EMAMILTD
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for EMCURE
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ENDURANCE
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ENGINERSIN
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ENRIN
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ERIS
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ESCORTS
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ETERNAL
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for EXIDEIND
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for FACT
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for FEDERALBNK
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for FINCABLES
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for FINPIPE
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for FIRSTCRY
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for FIVESTAR
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for FLUOROCHEM
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for FORCEMOT
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for FORTIS
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for FSL
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for GAIL
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for GESHIP
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for GICRE
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for GILLETTE
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for GLAND
+2026-01-08 08:41:44 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for GLAXO
+2026-01-08 08:43:09 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing AIIL (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:10 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ANANDRATHI (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:10 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ANANTRAJ (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:10 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ASAHIINDIA (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:10 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ASTERDM (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:10 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ATHERENERG (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:10 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing AUBANK (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:10 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing AWL (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:10 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BAJAJ-AUTO (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:10 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BAJAJFINSV (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:10 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BALKRISIND (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:10 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BALRAMCHIN (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:10 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BAJAJHFL (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:10 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BASF (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:10 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BATAINDIA (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:10 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BBTC (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:10 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BPCL (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:10 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BSE (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:10 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing CEATLTD (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:10 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing CENTURYPLY (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:11 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing CHOICEIN (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:11 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing CLEAN (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:11 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing CRISIL (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:11 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DATAPATTNS (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:11 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DBREALTY (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:11 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DEEPAKFERT (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:11 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DELHIVERY (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:11 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DLF (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:11 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DIVISLAB (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:11 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DRREDDY (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:11 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing EMCURE (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:11 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ESCORTS (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:12 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing GESHIP (swing): The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+2026-01-08 08:43:13 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing AIIL (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:13 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ANANTRAJ (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:13 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ANANDRATHI (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:13 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ASAHIINDIA (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:13 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ASTERDM (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:13 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ATHERENERG (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:13 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing AUBANK (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:14 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing AWL (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:14 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BAJAJ-AUTO (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:14 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BAJAJFINSV (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:14 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BAJAJHFL (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:14 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BALRAMCHIN (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:14 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BALKRISIND (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:14 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BASF (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:14 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BATAINDIA (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:14 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BBTC (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:14 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BPCL (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:14 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BSE (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:14 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing CEATLTD (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:14 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing CENTURYPLY (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:14 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing CHOICEIN (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:15 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing CLEAN (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:15 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing CRISIL (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:15 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DATAPATTNS (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:15 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DBREALTY (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:15 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DEEPAKFERT (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:15 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DELHIVERY (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:15 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DIVISLAB (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:15 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DLF (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:15 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DRREDDY (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:15 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing EMCURE (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:15 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ESCORTS (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:16 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing GESHIP (swing): The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+2026-01-08 08:43:19 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for APARINDS
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BIOCON
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BEML
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BBTC
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BANKBARODA
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BERGEPAINT
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BLUEDART
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CAMS
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for BANDHANBNK
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CANBK
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CANFINHOME
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CAPLIPOINT
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CARBORUNIV
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CASTROLIND
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CCL
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CDSL
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CEATLTD
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CENTRALBK
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CENTURYPLY
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CERA
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CESC
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CGCL
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CGPOWER
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CHALET
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CHAMBLFERT
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CHENNPETRO
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CHOICEIN
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CHOLAHLDNG
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CHOLAFIN
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CIPLA
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CLEAN
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for COCHINSHIP
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for COFORGE
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for COHANCE
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for COLPAL
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CONCOR
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CONCORDBIO
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for COROMANDEL
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CRAFTSMAN
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CREDITACC
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CRISIL
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CROMPTON
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CUB
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CUMMINSIND
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for CYIENT
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DABUR
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DALBHARAT
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DATAPATTNS
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DBREALTY
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DCMSHRIRAM
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DEEPAKFERT
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DEEPAKNTR
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DELHIVERY
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DEVYANI
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DIVISLAB
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DIXON
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DLF
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DMART
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DOMS
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DRREDDY
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for DUMMYHDLVR
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ECLERX
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for EICHERMOT
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for EIDPARRY
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for EIHOTEL
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ELECON
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ELGIEQUIP
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for EMAMILTD
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for EMCURE
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ENDURANCE
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ENGINERSIN
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ENRIN
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ERIS
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ESCORTS
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for ETERNAL
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for EXIDEIND
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for FACT
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for FEDERALBNK
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for FINCABLES
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for FINPIPE
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for FIRSTCRY
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for FIVESTAR
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for FLUOROCHEM
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for FORCEMOT
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for FORTIS
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for FSL
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for GAIL
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for GESHIP
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for GICRE
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for GILLETTE
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for GLAND
+2026-01-08 08:43:21 | ERROR    | app.data.fetch_data:fetch_intraday_data:269 - Intraday fetch failed for GLAXO
+2026-01-08 08:43:21 | ERROR    | app.engine.signal_generator:analyze_stock_intraday:269 - Error analyzing BEL (intraday): cannot reindex on an axis with duplicate labels
+2026-01-08 08:43:31 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing AIIL (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:31 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ANANDRATHI (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:31 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ANANTRAJ (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:31 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ASAHIINDIA (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:31 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ASTERDM (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:31 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ATHERENERG (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:31 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing AUBANK (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:31 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing AWL (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:31 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BAJAJFINSV (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:31 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BAJAJ-AUTO (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:31 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BAJAJHFL (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:31 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BALKRISIND (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:31 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BALRAMCHIN (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:32 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BASF (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:32 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BATAINDIA (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:32 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BBTC (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:32 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BPCL (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:32 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing BSE (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:32 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing CEATLTD (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:32 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing CENTURYPLY (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:32 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing CHOICEIN (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:32 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing CLEAN (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:32 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing CRISIL (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:33 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DBREALTY (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:33 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DATAPATTNS (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:33 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DEEPAKFERT (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:33 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DELHIVERY (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:33 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DIVISLAB (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:33 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DLF (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:33 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing DRREDDY (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:33 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing EMCURE (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:33 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing ESCORTS (swing): archive_signal() got an unexpected keyword argument 'timestamp'
+2026-01-08 08:43:33 | ERROR    | app.engine.signal_generator:analyze_stock_swing:213 - Error analyzing GESHIP (swing): The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().

@@ -183,3 +183,139 @@ def get_sector_bias(economic_bias: str) -> dict:
         }
     else:
         return {}  # Neutral: No specific bias
+
+
+# === V1.3 GLOBAL MACRO INPUTS ===
+
+@dataclass
+class GlobalMacroContext:
+    """Global market indicators for enhanced regime context"""
+    vix: float              # CBOE VIX (fear index)
+    vix_risk: str           # "low", "normal", "high", "extreme"
+    fed_rate: float         # US Fed funds rate
+    brent_crude: float      # Oil price USD/barrel
+    dxy: float              # US Dollar Index
+    last_updated: datetime
+    
+    def to_dict(self) -> dict:
+        return {
+            "vix": round(self.vix, 2),
+            "vixRisk": self.vix_risk,
+            "fedRate": self.fed_rate,
+            "brentCrude": round(self.brent_crude, 2),
+            "dxy": round(self.dxy, 2),
+            "lastUpdated": self.last_updated.isoformat(),
+        }
+
+
+def _classify_vix_risk(vix: float) -> str:
+    """Classify VIX level into risk categories"""
+    if vix < 15:
+        return "low"       # Complacency
+    elif vix < 20:
+        return "normal"    # Normal market
+    elif vix < 30:
+        return "high"      # Elevated fear
+    else:
+        return "extreme"   # Panic/crisis
+
+
+def get_vix() -> float:
+    """
+    Fetch current VIX (CBOE Volatility Index) via Yahoo Finance.
+    
+    Returns:
+        VIX value (default 20 if fetch fails)
+    """
+    try:
+        import yfinance as yf
+        vix = yf.Ticker("^VIX")
+        price = vix.info.get("regularMarketPrice")
+        if price:
+            return float(price)
+        # Fallback to history
+        hist = vix.history(period="1d")
+        if not hist.empty:
+            return float(hist['Close'].iloc[-1])
+    except Exception as e:
+        logger.warning(f"Failed to fetch VIX: {e}")
+    return 20.0  # Default
+
+
+def get_oil_price() -> float:
+    """
+    Fetch Brent Crude oil price via Yahoo Finance (BZ=F).
+    
+    Returns:
+        Oil price in USD/barrel (default 80 if fetch fails)
+    """
+    try:
+        import yfinance as yf
+        oil = yf.Ticker("BZ=F")
+        price = oil.info.get("regularMarketPrice")
+        if price:
+            return float(price)
+        hist = oil.history(period="1d")
+        if not hist.empty:
+            return float(hist['Close'].iloc[-1])
+    except Exception as e:
+        logger.warning(f"Failed to fetch oil price: {e}")
+    return 80.0  # Default
+
+
+def get_dxy() -> float:
+    """
+    Fetch US Dollar Index (DX-Y.NYB).
+    
+    Returns:
+        DXY value (default 104 if fetch fails)
+    """
+    try:
+        import yfinance as yf
+        dxy = yf.Ticker("DX-Y.NYB")
+        price = dxy.info.get("regularMarketPrice")
+        if price:
+            return float(price)
+        hist = dxy.history(period="1d")
+        if not hist.empty:
+            return float(hist['Close'].iloc[-1])
+    except Exception as e:
+        logger.warning(f"Failed to fetch DXY: {e}")
+    return 104.0  # Default
+
+
+def get_global_macro() -> GlobalMacroContext:
+    """
+    Fetch all global macro indicators.
+    
+    V1.3 Feature: Used for enhanced regime gating.
+    """
+    vix = get_vix()
+    
+    return GlobalMacroContext(
+        vix=vix,
+        vix_risk=_classify_vix_risk(vix),
+        fed_rate=5.25,  # Update periodically (Fed funds rate)
+        brent_crude=get_oil_price(),
+        dxy=get_dxy(),
+        last_updated=datetime.now(),
+    )
+
+
+def should_gate_on_vix(vix: float = None) -> tuple[bool, str]:
+    """
+    Check if signals should be gated due to high VIX.
+    
+    Returns:
+        (should_gate, reason)
+    """
+    if vix is None:
+        vix = get_vix()
+    
+    if vix > 35:
+        return True, f"Extreme VIX ({vix:.1f}) - market panic"
+    elif vix > 30:
+        return True, f"High VIX ({vix:.1f}) - elevated fear"
+    
+    return False, ""
+
