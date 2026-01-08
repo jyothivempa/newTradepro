@@ -112,13 +112,47 @@ class FailureTracker:
             
             # Update status based on threshold
             if m.consecutive_failures >= self.failure_threshold:
+                was_healthy = m.status == DataSourceStatus.HEALTHY
                 m.status = DataSourceStatus.DEGRADED
                 logger.warning(
                     f"Data source '{source}' marked DEGRADED "
                     f"(failures: {m.consecutive_failures})"
                 )
+                
+                # V1.2: Auto-alert on failover
+                if was_healthy:
+                    self._send_failover_alert(source, error)
             
             logger.debug(f"Data source '{source}' failure recorded: {error}")
+    
+    def _send_failover_alert(self, source: str, error: str = None) -> None:
+        """Send Telegram alert when a source fails over (V1.2)"""
+        try:
+            from app.utils.notifications import send_telegram_text
+            import asyncio
+            
+            message = (
+                f"⚠️ *Data Source Failover*\n\n"
+                f"Source: `{source}`\n"
+                f"Status: DEGRADED\n"
+                f"Error: {error or 'Unknown'}\n\n"
+                f"Auto-switching to fallback sources."
+            )
+            
+            # Run async in thread context
+            try:
+                loop = asyncio.get_event_loop()
+                if loop.is_running():
+                    asyncio.create_task(send_telegram_text(message))
+                else:
+                    loop.run_until_complete(send_telegram_text(message))
+            except RuntimeError:
+                # No event loop, create one
+                asyncio.run(send_telegram_text(message))
+                
+            logger.info(f"Failover alert sent for '{source}'")
+        except Exception as e:
+            logger.warning(f"Failed to send failover alert: {e}")
     
     def should_skip_source(self, source: str) -> bool:
         """

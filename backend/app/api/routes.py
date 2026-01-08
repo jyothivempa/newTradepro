@@ -530,7 +530,7 @@ async def get_trade_stats_endpoint(
     """
     Get trade outcome statistics from logged trades.
     
-    V1.1 Feature: Returns win rate by regime, avg MFE/MAE, avg bars held.
+    V1.2: Now includes Sharpe ratio, expectancy, and STT-adjusted returns.
     """
     from app.data.trade_logger import get_trade_history, get_trade_stats
     
@@ -544,6 +544,55 @@ async def get_trade_stats_endpoint(
     
     stats = get_trade_stats(trades)
     return stats
+
+
+class BacktestRequest(BaseModel):
+    strategy: str = "swing"
+    start_date: str = "2024-01-01"
+    end_date: str = "2024-12-31"
+    symbol: str = None
+
+
+@router.post("/backtest")
+async def run_backtest_endpoint(request: BacktestRequest):
+    """
+    Run backtest on historical data.
+    
+    V1.2 Feature: Web-based backtesting with full metrics.
+    
+    Returns:
+        Win rate, Sharpe, expectancy, STT-adjusted return, win rate by regime
+    """
+    from app.engine.backtest import backtest_portfolio
+    from app.data.nse_calendar import is_market_open
+    
+    symbols = [request.symbol] if request.symbol else None
+    
+    try:
+        result = backtest_portfolio(
+            request.strategy,
+            symbols,
+            start_date=request.start_date,
+            end_date=request.end_date
+        )
+        
+        if 'error' in result:
+            raise HTTPException(status_code=400, detail=result['error'])
+        
+        return {
+            "strategy": request.strategy,
+            "period": f"{request.start_date} to {request.end_date}",
+            "symbolCount": result.get('symbolCount', 0),
+            "totalTrades": result.get('totalTrades', 0),
+            "winRate": result.get('overallWinRate', 0),
+            "expectancy": result.get('avgExpectancy', 0),
+            "maxDrawdown": result.get('avgMaxDrawdown', 0),
+            "symbols": result.get('symbols', []),
+        }
+        
+    except Exception as e:
+        logger.error(f"Backtest failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # ===== Portfolio Tracker Endpoints =====

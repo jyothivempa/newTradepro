@@ -147,8 +147,10 @@ def get_trade_stats(trades: List[TradeOutcome]) -> dict:
     """
     Calculate statistics from trade history.
     
+    V1.2: Added Sharpe ratio, expectancy, and STT-adjusted returns.
+    
     Returns:
-        Dict with win rate, avg MFE/MAE, win rate by regime, etc.
+        Dict with win rate, avg MFE/MAE, win rate by regime, Sharpe, expectancy.
     """
     if not trades:
         return {"error": "No trades to analyze"}
@@ -173,6 +175,21 @@ def get_trade_stats(trades: List[TradeOutcome]) -> dict:
         if regime_trades:
             regime_stats[regime] = round(len(regime_winners) / len(regime_trades) * 100, 1)
     
+    # === V1.2 ENHANCED METRICS ===
+    
+    # Expectancy: (Win% × AvgWin) - (Loss% × AvgLoss)
+    win_pct = len(winners) / len(trades)
+    loss_pct = len(losers) / len(trades)
+    expectancy = (win_pct * avg_win) - (loss_pct * abs(avg_loss))
+    
+    # Sharpe Ratio (annualized, assuming daily returns)
+    returns = [t.pnl_pct for t in trades]
+    sharpe = calculate_sharpe_ratio(returns)
+    
+    # STT-adjusted total return
+    total_return = sum(t.pnl_pct for t in trades)
+    stt_adjusted = total_return - (len(trades) * STT_RATE * 100)  # STT per trade
+    
     return {
         "totalTrades": len(trades),
         "winRate": round(win_rate, 1),
@@ -182,4 +199,63 @@ def get_trade_stats(trades: List[TradeOutcome]) -> dict:
         "avgMAE": round(avg_mae, 2),
         "avgBarsHeld": round(avg_bars, 1),
         "winRateByRegime": regime_stats,
+        # V1.2 metrics
+        "expectancy": round(expectancy, 2),
+        "sharpeRatio": round(sharpe, 2),
+        "totalReturnPct": round(total_return, 2),
+        "sttAdjustedReturnPct": round(stt_adjusted, 2),
     }
+
+
+# === V1.2 METRIC FUNCTIONS ===
+
+# STT Rate (0.1% for delivery trades)
+STT_RATE = 0.001
+
+
+def calculate_sharpe_ratio(returns: List[float], risk_free_annual: float = 0.06) -> float:
+    """
+    Calculate annualized Sharpe Ratio.
+    
+    Args:
+        returns: List of trade returns (%)
+        risk_free_annual: Annual risk-free rate (RBI repo ~6%)
+    
+    Returns:
+        Annualized Sharpe Ratio
+    """
+    if not returns or len(returns) < 2:
+        return 0.0
+    
+    import math
+    
+    avg_return = sum(returns) / len(returns)
+    variance = sum((r - avg_return) ** 2 for r in returns) / len(returns)
+    std_dev = math.sqrt(variance) if variance > 0 else 0.001
+    
+    # Assume ~250 trading days, adjust for avg bars held
+    trades_per_year = 250 / max(1, sum(1 for _ in returns))
+    
+    # Daily risk-free
+    risk_free_daily = risk_free_annual / 252
+    
+    # Sharpe = (Return - RiskFree) / StdDev * sqrt(N)
+    sharpe = (avg_return - risk_free_daily) / std_dev * math.sqrt(min(trades_per_year, 50))
+    
+    return sharpe
+
+
+def apply_stt(trade_value: float, is_intraday: bool = False) -> float:
+    """
+    Calculate STT (Securities Transaction Tax) for a trade.
+    
+    Args:
+        trade_value: Total value of the trade
+        is_intraday: True for intraday (0.025%), False for delivery (0.1%)
+    
+    Returns:
+        STT amount to deduct
+    """
+    rate = 0.00025 if is_intraday else STT_RATE
+    return trade_value * rate
+
