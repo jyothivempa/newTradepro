@@ -8,82 +8,216 @@ Professional trading signal system for Indian markets (NSE) with AI-powered swin
 
 ## ✨ Features
 
-### Core
-- **Swing Trading** - Daily breakout/pullback signals with multi-timeframe analysis
-- **Intraday Bias Engine** - Directional bias only (Bullish/Bearish/Neutral) for next session. *No trade signals.*
-- **Portfolio Controls** - Daily limit (-2R), regime transition exits, correlation gating
-- **Market Regime** - TRENDING/RANGING/VOLATILE/DEAD classification with 0-1 confidence
-
-### V1 Enhancements
-| Feature | Description |
-|---------|-------------|
-| **Data Redundancy** | Yahoo → NSE → Alpha Vantage auto-failover |
-| **NIFTY 500 Support** | Adaptive workers (10→40) for larger universes |
-| **Regime Gating** | -20 score for swing trades in sideways markets |
-| **Sector ATR Caps** | Dynamic volatility caps (METAL 3%, IT 2%) |
-| **Percentile Scoring** | Top 8% signals vs static threshold |
-| **Signal Explainability** | `passed[]` / `failed[]` arrays in response |
-| **Sector Deduplication** | Max 2 signals per sector per scan |
-
-### V1.1 Enhancements
-| Feature | Description |
-|---------|-------------|
-| **Regime Confidence** | 0-1 probability scale for position scaling |
-| **Trade Logger** | CSV with MFE, MAE, bars held, regime at entry |
-| **Trade Stats API** | Win rate by regime, avg excursion metrics |
-
-### V1.2 Enhancements
-| Feature | Description |
-|---------|-------------|
-| **Backtest API** | `POST /api/backtest` for web-based runs |
-| **Sharpe Ratio** | Annualized risk-adjusted return metric |
-| **Expectancy** | (Win% × AvgWin) - (Loss% × AvgLoss) |
-| **STT Simulation** | 0.1% delivery tax deduction in results |
-| **Auto-Failover Alerts** | Telegram notification on source degradation |
-| **NSE Calendar** | Holiday detection for graceful scan skip |
-| **Backtest Realism** | Slippage (ATR based) + Gap handling |
-
-### V2.0 Enterprise Hardening
-| Feature | Description |
-|---------|-------------|
-| **Audit Trail** | Append-only JSONL logging for every decision |
-| **Deterministic** | Strict version registry (Engine v1.2, Risk v1.2) |
-| **Risk Governors** | Weekly Loss (-6R) + Sector Cap (30%) Override |
-| **Infrastructure** | Nginx (Rate Limits) + Gunicorn + Health Checks |
-| **Compliance** | `X-System-Versions` header in all responses |
+| Module | Description |
+|--------|-------------|
+| **Swing Trading** | Daily breakout/pullback signals with multi-timeframe analysis |
+| **Intraday Bias** | Directional bias (Bullish/Bearish/Neutral) for next session |
+| **Market Regime** | TRENDING/RANGING/VOLATILE/DEAD with 0-1 confidence |
+| **Risk Governors** | Circuit breaker, correlation gating, regime scaling |
+| **Audit Trail** | SHA-256 hash-chain logging for compliance |
+| **Real-Time Data** | WebSocket price feeds with auto-reconnection |
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ System Architecture
 
 ```
-DATA → STRATEGY → SCORER → REGIME FILTER → RISK MANAGER → RESPONSE
-
-┌─────────────────────────────────────────────────────────────────────┐
-│                         FRONTEND (React)                            │
-│   Dashboard  │  SignalCard  │  StockChart  │  Portfolio Tracker    │
-└────────────────────────────────┬────────────────────────────────────┘
-                                 │ REST API
-┌────────────────────────────────▼────────────────────────────────────┐
-│                         BACKEND (FastAPI)                           │
-│  ┌──────────────────────────────────────────────────────────────┐   │
-│  │  SIGNAL GENERATOR  →  SCORER  →  REGIME  →  RISK  →  OUTPUT  │   │
-│  └──────────────────────────────────────────────────────────────┘   │
-│  ┌──────────────────────────────────────────────────────────────┐   │
-│  │  DATA: Yahoo → NSE → AlphaVantage  │  CACHE: Redis/CSV       │   │
-│  └──────────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                            TRADEEDGE PRO V2.0                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐    ┌───────────┐  │
+│  │   FRONTEND   │◄──►│   WebSocket  │◄──►│   FastAPI    │◄──►│  SQLite   │  │
+│  │    React     │    │   Socket.IO  │    │   Backend    │    │  Redis    │  │
+│  └──────────────┘    └──────────────┘    └──────────────┘    └───────────┘  │
+│                                                                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                           DATA PIPELINE                                      │
+│                                                                              │
+│  Yahoo Finance ──► NSE API ──► Alpha Vantage (Fallback Chain)               │
+│                           │                                                  │
+│                           ▼                                                  │
+│                    ┌─────────────┐                                          │
+│                    │   Cache     │  (Redis + CSV Fallback)                  │
+│                    │   60s TTL   │                                          │
+│                    └─────────────┘                                          │
+│                                                                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                        SIGNAL GENERATION CORE                                │
+│                                                                              │
+│  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐       │
+│  │  DATA   │──►│STRATEGY │──►│ SCORER  │──►│ REGIME  │──►│  RISK   │──►OUT │
+│  │ Fetch   │   │ Analyze │   │ 0-100   │   │ Filter  │   │ Validate│       │
+│  └─────────┘   └─────────┘   └─────────┘   └─────────┘   └─────────┘       │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
+
+---
+
+## 🧠 Core Logic Modules
+
+### 1. Signal Generation Engine (`signal_generator.py`)
+
+```python
+# Parallel scanning with worker pool
+for stock in stock_universe:
+    1. Fetch OHLCV data (with failover)
+    2. Run strategy analysis (Swing/Intraday)
+    3. Score signal (0-100 with breakdown)
+    4. Apply regime filter (-20 for sideways)
+    5. Validate with Risk Manager
+    6. Archive to SQLite + Audit Log
+```
+
+**Key Parameters:**
+- `MIN_SIGNAL_SCORE`: 70
+- `MIN_RISK_REWARD`: 2.0
+- `MAX_STOP_LOSS_PCT`: 5%
+
+---
+
+### 2. Market Regime Classification (`market_regime.py`)
+
+```
+ADX-Based Classification:
+┌─────────────────────────────────────────┐
+│  ADX > 25  &  DI+ dominates  → TRENDING │
+│  ADX > 25  &  ATR > 3%       → VOLATILE │
+│  ADX < 20  &  ATR < 1%       → DEAD     │
+│  Otherwise                   → RANGING  │
+└─────────────────────────────────────────┘
+
+Confidence Score:
+  confidence = min((ADX - 15) / 20, 1.0)
+```
+
+**Regime Impact:**
+| Regime | Position Multiplier | Score Modifier |
+|--------|---------------------|----------------|
+| TRENDING | 1.0× | +10 bonus |
+| RANGING | 0.6× | -20 penalty |
+| VOLATILE | 0.5× | 0 |
+| DEAD | 0.0× | -30 penalty |
+
+---
+
+### 3. Scoring System (`scorer.py`)
+
+```
+Base Score: 100
+
+Deductions:
+  - Weak volume:       -15
+  - Poor EMA alignment: -20
+  - Low ADX (<20):     -10
+  - High volatility:   -10
+  - Sideways regime:   -20
+
+Bonuses:
+  - Strong trend:      +10
+  - Volume spike:      +5
+  - Sector momentum:   +5
+
+Final = Base - Deductions + Bonuses
+```
+
+---
+
+### 4. Risk Management (`risk_manager.py` + `portfolio_risk.py`)
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                      RISK GOVERNORS V2.0                         │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  ┌──────────────────┐   Position blocked if ANY rule triggers   │
+│  │ Daily Kill Switch│   P&L < -2R for the day                   │
+│  ├──────────────────┤                                            │
+│  │ Weekly Kill      │   P&L < -6R for the week                  │
+│  ├──────────────────┤                                            │
+│  │ Circuit Breaker  │   3 consecutive losing trades             │
+│  ├──────────────────┤                                            │
+│  │ Correlation Gate │   New trade corr > 0.8 with open trades   │
+│  ├──────────────────┤                                            │
+│  │ Sector Cap       │   > 30% capital in single sector          │
+│  ├──────────────────┤                                            │
+│  │ Concentration    │   > 2 trades same sector + direction      │
+│  └──────────────────┘                                            │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 5. Audit Trail (`audit.py`)
+
+```
+SHA-256 Hash-Chain:
+  
+  Entry N-1                      Entry N
+  ┌─────────────────┐           ┌─────────────────┐
+  │ timestamp       │           │ timestamp       │
+  │ event_type      │           │ event_type      │
+  │ data            │           │ data            │
+  │ prev_hash ──────┼───────────┼► prev_hash      │
+  │ hash ───────────┼───────────┘                 │
+  └─────────────────┘           │ hash            │
+                                └─────────────────┘
+
+API: GET /api/audit/verify?date=2026-01-08
+```
+
+---
+
+### 6. WebSocket Real-Time Feed (`websocket_manager.py`)
+
+```javascript
+// Client subscribes
+socket.emit('subscribe_prices', { symbols: ['RELIANCE', 'TCS'] });
+
+// Server broadcasts every 5s
+socket.on('price_update', (data) => {
+  // data.prices = { RELIANCE: { ltp: 2850.50, changePct: 1.2 }, ... }
+});
+```
+
+---
+
+## 📊 API Endpoints
+
+### Core APIs
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/swing` | GET | Swing signals with score breakdown |
+| `/api/intraday-bias` | GET | Directional bias for next session |
+| `/api/calculate-position` | POST | Risk-based position sizing |
+| `/api/backtest/{symbol}` | GET | Historical strategy backtest |
+
+### Risk & Compliance
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/audit/verify` | GET | Verify hash-chain integrity |
+| `/api/audit/compliance-report` | GET | Generate SEBI report |
+| `/api/audit/portfolio-risk-status` | GET | Current risk state |
+| `/ws/status` | GET | WebSocket connection stats |
+
+### Portfolio
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/trades` | GET/POST | List/add trades |
+| `/api/trades/{id}/close` | POST | Close trade with P&L |
+| `/api/portfolio/stats` | GET | Portfolio summary |
 
 ---
 
 ## 🚀 Quick Start
 
-### Backend
+### Backend (with WebSocket)
 ```bash
 cd backend
 pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
+python -m uvicorn app.main:socket_app --host 127.0.0.1 --port 8000
 ```
 
 ### Frontend
@@ -93,36 +227,9 @@ npm install
 npm run dev
 ```
 
-**Links**: Backend http://localhost:8000/docs | Frontend http://localhost:5173
-
----
-
-## 📊 API Endpoints
-
-| Endpoint | Description |
-|----------|-------------|
-| `GET /api/swing` | Swing signals (daily) |
-| `GET /api/intraday-bias` | 15m EOD signals |
-| `GET /api/stocks/{symbol}` | OHLCV data |
-| `GET /api/health` | Health + cache stats |
-| `GET /api/data-sources/health` | Data source status |
-| `GET /api/trade-stats` | Sharpe, expectancy, win rate by regime |
-| `POST /api/backtest` | **V1.2** Web-based backtesting |
-| `GET /api/economic-indicators` | RBI rates, inflation |
-| `GET /api/options-hint/{symbol}` | Covered call suggestions |
-| `POST /api/calculate-position` | Position sizing |
-| `POST /api/trades/add` | Portfolio tracker |
-
----
-
-## 🧪 CLI Tools
-
-### Backtest
-```bash
-cd backend
-python run_backtest.py --strategy swing --from 2024-01-01 --to 2024-12-31
-python run_backtest.py --symbol RELIANCE.NS
-```
+**URLs:** 
+- API Docs: http://localhost:8000/docs
+- Frontend: http://localhost:5173
 
 ---
 
@@ -132,18 +239,18 @@ python run_backtest.py --symbol RELIANCE.NS
 # Stock Universe
 STOCK_UNIVERSE=NIFTY100          # NIFTY100, NIFTY200, NIFTY500
 
-# Strategy
+# Strategy Thresholds
 MIN_SIGNAL_SCORE=70
 MIN_RISK_REWARD=2.0
 MAX_STOP_LOSS_PCT=5.0
 MAX_OPEN_TRADES=5
 
-# Feature Toggles (Optional)
-ENABLE_OPTIONS_HINTS=false
-ENABLE_ECONOMIC_INDICATORS=false
-ADAPTIVE_WORKERS=true
+# Risk Limits
+DAILY_LOSS_LIMIT_R=2.0           # -2R daily kill switch
+WEEKLY_LOSS_LIMIT_R=6.0          # -6R weekly kill switch
+CIRCUIT_BREAKER_LOSSES=3         # Consecutive losses to pause
 
-# Alerts
+# Telegram Alerts
 TELEGRAM_BOT_TOKEN=your_token
 TELEGRAM_CHAT_ID=your_chat_id
 ```
@@ -156,32 +263,54 @@ TELEGRAM_CHAT_ID=your_chat_id
 TradeEdgePro/
 ├── backend/
 │   ├── app/
-│   │   ├── api/routes.py           # REST endpoints
-│   │   ├── config.py               # Settings
+│   │   ├── api/routes.py              # REST + WebSocket status
+│   │   ├── core/
+│   │   │   ├── audit.py               # Hash-chain audit log
+│   │   │   └── versioning.py          # System versions
 │   │   ├── data/
-│   │   │   ├── fetch_data.py       # Data with NSE fallback
-│   │   │   ├── data_source_monitor.py  # Auto-failover alerts
-│   │   │   ├── trade_logger.py     # Sharpe, expectancy, STT
-│   │   │   ├── nse_calendar.py     # Holiday detection
-│   │   │   └── economic_indicators.py  # RBI data
+│   │   │   ├── fetch_data.py          # Multi-source failover
+│   │   │   ├── portfolio.py           # Trade tracking
+│   │   │   └── live_quotes.py         # Price feeds
 │   │   ├── engine/
-│   │   │   ├── signal_generator.py # Parallel scanning
-│   │   │   ├── scorer.py           # Regime-aware scoring
-│   │   │   ├── risk_manager.py     # Position sizing
-│   │   │   └── market_regime.py    # 0-1 confidence scores
-│   │   └── strategies/
-│   │       ├── swing.py            # Pullback + breakout
-│   │       └── intraday_bias.py    # Sector ATR caps
-│   ├── run_backtest.py             # CLI backtest tool
+│   │   │   ├── signal_generator.py    # Core signal logic
+│   │   │   ├── scorer.py              # 0-100 scoring
+│   │   │   ├── market_regime.py       # ADX-based regime
+│   │   │   ├── risk_manager.py        # Position-level risk
+│   │   │   ├── portfolio_risk.py      # Portfolio-level risk
+│   │   │   └── backtest.py            # Historical testing
+│   │   ├── realtime/
+│   │   │   ├── websocket_manager.py   # Socket.IO server
+│   │   │   └── price_aggregator.py    # Price broadcaster
+│   │   ├── strategies/
+│   │   │   ├── swing.py               # Swing strategy
+│   │   │   └── intraday_bias.py       # Intraday bias
+│   │   └── utils/
+│   │       ├── precision.py           # Decimal calculations
+│   │       └── logger.py              # Structured logging
 │   └── requirements.txt
 ├── frontend/
-│   ├── src/components/
-│   │   ├── Dashboard.jsx
-│   │   ├── SignalCard.jsx
-│   │   └── Portfolio.jsx
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── Dashboard.jsx          # Main dashboard
+│   │   │   └── SignalCard.jsx         # Signal display
+│   │   ├── hooks/
+│   │   │   └── useWebSocket.js        # Real-time hook
+│   │   └── pages/
+│   │       └── Portfolio.jsx          # Trade tracker
 │   └── package.json
 └── docker-compose.yml
 ```
+
+---
+
+## 🔢 Version History
+
+| Version | Date | Highlights |
+|---------|------|------------|
+| V2.0 | 2026-01 | Circuit breaker, hash-chain audit, WebSocket |
+| V1.2 | 2025-12 | Backtest API, Sharpe ratio, STT simulation |
+| V1.1 | 2025-11 | Regime confidence, trade logger |
+| V1.0 | 2025-10 | Initial release |
 
 ---
 
